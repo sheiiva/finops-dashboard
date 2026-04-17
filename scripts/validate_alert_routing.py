@@ -7,7 +7,6 @@ import argparse
 import json
 from pathlib import Path
 
-
 REQUIRED_ALERTS = {"FinOpsSpendAnomalyHigh", "FinOpsTagComplianceDrift"}
 
 

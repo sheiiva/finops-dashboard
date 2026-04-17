@@ -7,7 +7,6 @@ import argparse
 import json
 from pathlib import Path
 
-
 CONFIDENCE_MAP = {"low": 0.5, "medium": 0.75, "high": 1.0}
 EFFORT_MAP = {"low": 1.0, "medium": 0.7, "high": 0.4}
 

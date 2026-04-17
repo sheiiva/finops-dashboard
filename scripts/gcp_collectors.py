@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 
@@ -40,7 +40,7 @@ def collect_billing(scope: dict) -> list[dict]:
             "cost_currency": "USD",
             "usage_quantity": 24,
             "usage_unit": "hour",
-            "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
             "tags": {"cost_center": scope["cost_center"]},
         }
     ]
