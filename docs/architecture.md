@@ -61,3 +61,10 @@ flowchart LR
 - Core rules/scoring remain reusable across clouds.
 - Governance artifacts (runbooks, review cadence, DoD) are first-class.
 - Security by default: least privilege, no secrets in code, auditable automation.
+
+## Adapter Contract
+
+Provider adapter contract reference:
+
+- `docs/provider-adapter-contract.md`
+- `scripts/adapters/base.py`
