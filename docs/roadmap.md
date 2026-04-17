@@ -45,6 +45,7 @@ Deliverables:
 - Idle compute rules
 - Orphaned storage/artifact rules
 - Priority scoring model
+- Detection runbooks with sample inputs and generated findings
 
 Outcome:
 - Ranked, actionable savings opportunities.
