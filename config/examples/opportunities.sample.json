@@ -1,0 +1,26 @@
+[
+  {
+    "resource_id": "vm-idle-1",
+    "provider": "gcp",
+    "type": "idle_compute",
+    "estimated_monthly_savings_usd": 120.0,
+    "confidence": "high",
+    "effort": "low"
+  },
+  {
+    "resource_id": "disk-orphan-1",
+    "provider": "gcp",
+    "type": "orphaned_storage",
+    "estimated_monthly_savings_usd": 64.0,
+    "confidence": "medium",
+    "effort": "low"
+  },
+  {
+    "resource_id": "db-rightsize-1",
+    "provider": "gcp",
+    "type": "rightsizing",
+    "estimated_monthly_savings_usd": 300.0,
+    "confidence": "medium",
+    "effort": "high"
+  }
+]
