@@ -13,7 +13,6 @@ import json
 import sys
 from pathlib import Path
 
-
 ALLOWED_PROVIDERS = {"gcp", "aws", "azure", "multi"}
 ALLOWED_ENFORCEMENT_MODES = {"audit", "enforce"}
 REQUIRED_FIELDS = {"organization", "environment", "provider", "billing_scope", "tag_policy"}

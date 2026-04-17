@@ -5,9 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import sys
 from pathlib import Path
-
 
 REQUIRED_TAGS = ("owner", "environment", "service", "cost_center")
 

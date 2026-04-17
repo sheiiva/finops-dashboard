@@ -5,9 +5,8 @@ from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-
 
 REQUIRED_FIELDS = (
     "provider",
@@ -43,7 +42,7 @@ def _missing_fields(record: dict) -> list[str]:
 
 def _freshness_minutes(record: dict) -> float:
     ts = datetime.fromisoformat(record["timestamp"].replace("Z", "+00:00"))
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return (now - ts).total_seconds() / 60
 
 
