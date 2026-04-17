@@ -1,0 +1,14 @@
+{
+  "routes": [
+    {
+      "alert": "FinOpsSpendAnomalyHigh",
+      "channel": "slack-finops-alerts",
+      "owner": "team-finops"
+    },
+    {
+      "alert": "FinOpsTagComplianceDrift",
+      "channel": "pagerduty-finops-oncall",
+      "owner": "team-platform-governance"
+    }
+  ]
+}

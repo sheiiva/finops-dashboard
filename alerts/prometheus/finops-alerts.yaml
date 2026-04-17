@@ -1,0 +1,27 @@
+groups:
+  - name: finops-alerts
+    rules:
+      - alert: FinOpsSpendAnomalyHigh
+        expr: |
+          (
+            sum(finops_daily_spend_usd)
+            >
+            (avg_over_time(sum(finops_daily_spend_usd)[14d]) * 1.25)
+          )
+        for: 30m
+        labels:
+          severity: warning
+          category: anomaly
+        annotations:
+          summary: "Cloud spend anomaly detected"
+          description: "Current daily spend is more than 25% above 14-day baseline."
+
+      - alert: FinOpsTagComplianceDrift
+        expr: finops_tag_compliance_ratio < 0.90
+        for: 1h
+        labels:
+          severity: critical
+          category: compliance
+        annotations:
+          summary: "Tag compliance drift detected"
+          description: "Mandatory tag compliance dropped below 90% for at least one hour."
