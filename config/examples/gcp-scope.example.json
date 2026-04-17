@@ -1,0 +1,7 @@
+{
+  "project_id": "example-project",
+  "region": "europe-west1",
+  "environment": "dev",
+  "owner": "platform-team",
+  "cost_center": "CC-1001"
+}

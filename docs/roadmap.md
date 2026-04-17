@@ -33,6 +33,7 @@ Deliverables:
 - GCP collectors (inventory, utilization, cost)
 - Data quality and freshness checks
 - Example normalized records for contract validation
+- Collector runbook with scope input and generated artifacts
 
 Outcome:
 - Reliable telemetry foundation for optimization decisions.
