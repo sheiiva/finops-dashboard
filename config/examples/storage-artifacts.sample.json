@@ -1,0 +1,26 @@
+[
+  {
+    "provider": "gcp",
+    "resource_id": "disk-orphan-1",
+    "resource_type": "storage.disk",
+    "attached": false,
+    "last_access_days": 45,
+    "estimated_monthly_cost_usd": 80
+  },
+  {
+    "provider": "gcp",
+    "resource_id": "snapshot-active-1",
+    "resource_type": "storage.snapshot",
+    "attached": true,
+    "last_access_days": 3,
+    "estimated_monthly_cost_usd": 20
+  },
+  {
+    "provider": "gcp",
+    "resource_id": "bucket-cold-1",
+    "resource_type": "storage.bucket",
+    "attached": true,
+    "last_access_days": 120,
+    "estimated_monthly_cost_usd": 40
+  }
+]
