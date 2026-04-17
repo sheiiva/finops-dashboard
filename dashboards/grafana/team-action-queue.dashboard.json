@@ -1,0 +1,47 @@
+{
+  "title": "FinOps Team Action Queue",
+  "description": "Owner-level queue for optimization actions sorted by priority score.",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "tags": ["finops", "operations", "phase4"],
+  "panels": [
+    {
+      "id": 1,
+      "type": "table",
+      "title": "Action Queue by Owner",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_action_queue"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 2,
+      "type": "bar gauge",
+      "title": "Open Actions by Owner",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count by(owner) (finops_action_queue_open)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Unassigned Actions",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "count(finops_action_queue{owner=\"unassigned\"})"
+        }
+      ]
+    }
+  ]
+}
