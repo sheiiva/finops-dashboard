@@ -31,3 +31,11 @@ The implementation path starts with GCP and then extends to AWS and Azure throug
 - `terraform/`: dashboard platform and monitoring IaC baseline
 - `scripts/`: data collection and enrichment logic for waste detection
 - `docs/`: KPI definitions, dashboard specifications, and operating model
+
+## Delivery and Governance
+
+- Roadmap and milestones: `docs/roadmap.md`
+- Architecture and adapter model: `docs/architecture.md`
+- Local bootstrap steps: `docs/getting-started.md`
+- Decision records: `docs/decision-log/`
+- Contribution workflow: `CONTRIBUTING.md`

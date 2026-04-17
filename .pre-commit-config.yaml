@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
+    hooks:
+      - id: markdownlint
+        args: ["--disable", "MD013"]
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.37.1
+    hooks:
+      - id: yamllint
+
+  - repo: local
+    hooks:
+      - id: terraform-fmt-check
+        name: terraform fmt check
+        entry: bash -c 'if git ls-files "*.tf" | grep -q .; then terraform fmt -check -recursive; else echo "No Terraform files tracked yet"; fi'
+        language: system
+        pass_filenames: false
+
+      - id: terraform-validate
+        name: terraform validate
+        entry: bash -c 'if git ls-files "*.tf" | grep -q .; then for d in $(git ls-files "*.tf" | xargs -n1 dirname | sort -u); do (cd "$d" && terraform init -backend=false -input=false >/dev/null && terraform validate); done; else echo "No Terraform files tracked yet"; fi'
+        language: system
+        pass_filenames: false
