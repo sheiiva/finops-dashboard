@@ -1,0 +1,19 @@
+[
+  {
+    "id": "vm-1",
+    "tags": {
+      "owner": "platform-team",
+      "environment": "dev",
+      "service": "finops-api",
+      "cost_center": "CC-1001"
+    }
+  },
+  {
+    "id": "disk-1",
+    "tags": {
+      "owner": "platform-team",
+      "environment": "dev",
+      "service": "finops-api"
+    }
+  }
+]
