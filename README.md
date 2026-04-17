@@ -6,6 +6,18 @@
 
 This project provides direct cost savings by detecting cloud waste, quantifying monthly loss, and presenting prioritized optimization opportunities for engineering and finance stakeholders.
 
+## Why This Exists Beyond Native Cloud Cost Dashboards
+
+Google Cloud already provides strong cost visibility. This project complements it by adding an execution layer: prioritized actions, explicit ownership, estimated savings per action, and operational governance to ensure recommendations are implemented without breaking reliability targets.
+
+In short, native dashboards explain **where money is spent**; this project drives **what to do next, who does it, and how savings are verified**.
+
+## Interview Portfolio Positioning
+
+This repository is designed as a reusable FinOps accelerator template for real client delivery. It demonstrates platform engineering depth (IaC, observability, security, automation) and operating-model maturity (ownership, governance, runbooks, measurable outcomes), not only dashboard creation.
+
+The implementation path starts with GCP and then extends to AWS and Azure through a provider adapter model so the same framework can be parameterized and reused across companies.
+
 ## Technical Stack
 
 - Prometheus and Grafana deployed with Helm
