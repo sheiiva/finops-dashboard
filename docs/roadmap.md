@@ -21,6 +21,7 @@ Deliverables:
 - Baseline spend profile and optimization hypotheses
 - Explicit out-of-scope register with rationale
 - Compliance computation utility for mandatory tagging KPI
+- Baseline report artifact with ranked optimization hypotheses
 
 Outcome:
 - Shared baseline for technical and business prioritization.
