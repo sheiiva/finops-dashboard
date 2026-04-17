@@ -34,6 +34,7 @@ Deliverables:
 - Data quality and freshness checks
 - Example normalized records for contract validation
 - Collector runbook with scope input and generated artifacts
+- Quality report artifact generated from normalized collector output
 
 Outcome:
 - Reliable telemetry foundation for optimization decisions.
