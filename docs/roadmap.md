@@ -19,6 +19,7 @@ Deliverables:
 - Scope matrix (accounts/regions/environments)
 - Tagging policy and ownership model
 - Baseline spend profile and optimization hypotheses
+- Explicit out-of-scope register with rationale
 
 Outcome:
 - Shared baseline for technical and business prioritization.
