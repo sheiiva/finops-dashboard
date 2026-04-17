@@ -1,0 +1,19 @@
+[
+  {
+    "provider": "gcp",
+    "resource_id": "projects/example/zones/europe-west1-b/instances/vm-1",
+    "resource_type": "compute.instance",
+    "environment": "dev",
+    "owner": "platform-team",
+    "service": "finops-api",
+    "region": "europe-west1",
+    "cost_amount": 12.54,
+    "cost_currency": "USD",
+    "usage_quantity": 24,
+    "usage_unit": "hour",
+    "timestamp": "2026-04-17T00:00:00Z",
+    "tags": {
+      "cost_center": "CC-1001"
+    }
+  }
+]
