@@ -1,0 +1,18 @@
+[
+  {
+    "provider": "gcp",
+    "resource_id": "projects/example/zones/europe-west1-b/instances/vm-idle-1",
+    "resource_type": "compute.instance",
+    "avg_cpu_percent": 3.1,
+    "active_hours": 120,
+    "estimated_monthly_cost_usd": 240
+  },
+  {
+    "provider": "gcp",
+    "resource_id": "projects/example/zones/europe-west1-b/instances/vm-busy-1",
+    "resource_type": "compute.instance",
+    "avg_cpu_percent": 42.0,
+    "active_hours": 120,
+    "estimated_monthly_cost_usd": 260
+  }
+]
