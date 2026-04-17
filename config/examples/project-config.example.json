@@ -1,0 +1,10 @@
+{
+  "organization": "example-org",
+  "environment": "dev",
+  "provider": "gcp",
+  "billing_scope": "billing-account-123",
+  "tag_policy": {
+    "required_tags": ["owner", "environment", "service"],
+    "enforcement_mode": "audit"
+  }
+}

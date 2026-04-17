@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/project-config.schema.json",
+  "title": "Project Configuration",
+  "type": "object",
+  "required": [
+    "organization",
+    "environment",
+    "provider",
+    "billing_scope",
+    "tag_policy"
+  ],
+  "properties": {
+    "organization": {
+      "type": "string",
+      "description": "Logical organization or tenant identifier.",
+      "minLength": 1
+    },
+    "environment": {
+      "type": "string",
+      "description": "Deployment environment (dev/stage/prod/etc).",
+      "minLength": 1
+    },
+    "provider": {
+      "type": "string",
+      "description": "Primary cloud provider.",
+      "enum": ["gcp", "aws", "azure", "multi"]
+    },
+    "billing_scope": {
+      "type": "string",
+      "description": "Billing account/scope identifier used for cost ingestion.",
+      "minLength": 1
+    },
+    "tag_policy": {
+      "type": "object",
+      "description": "Policy for mandatory ownership and allocation tags.",
+      "required": ["required_tags", "enforcement_mode"],
+      "properties": {
+        "required_tags": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "enforcement_mode": {
+          "type": "string",
+          "enum": ["audit", "enforce"]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -8,6 +8,7 @@ Deliverables:
 - Reusable architecture definition
 - Provider adapter contract
 - Parameterized configuration schema
+- Config schema validation utility and onboarding example
 
 Outcome:
 - New company onboarding by config only, no core rewrite.
