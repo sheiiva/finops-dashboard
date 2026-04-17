@@ -1,0 +1,86 @@
+# -----------------------------
+# OS / Editor noise
+# -----------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# -----------------------------
+# Terraform / OpenTofu
+# -----------------------------
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# -----------------------------
+# Kubernetes and Helm artifacts
+# -----------------------------
+*.kubeconfig
+kubeconfig
+*.helm
+*.tgz
+chart.lock
+
+# -----------------------------
+# Python
+# -----------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+dist/
+build/
+*.egg-info/
+.venv/
+venv/
+env/
+
+# -----------------------------
+# Shell and local tooling output
+# -----------------------------
+*.log
+tmp/
+temp/
+.cache/
+
+# -----------------------------
+# Secrets / credentials
+# -----------------------------
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+id_rsa
+id_rsa.pub
+credentials
+credentials.*
+*.secret
+*.secrets.*
+secrets/
+
+# -----------------------------
+# Cursor local state
+# -----------------------------
+.cursor/

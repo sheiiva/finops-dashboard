@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+first_line="$(sed -n '1p' "$1")"
+pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9._/-]+\))?!?: .+'
+
+if ! printf '%s\n' "$first_line" | grep -Eq "$pattern"; then
+  echo "Invalid commit message format."
+  echo "Expected Conventional Commits, e.g.:"
+  echo "  feat(terraform): add eks module"
+  echo "  fix(ci)!: break old deploy flow"
+  exit 1
+fi
