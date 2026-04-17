@@ -1,0 +1,23 @@
+[
+  {
+    "resource_id": "vm-idle-1",
+    "type": "idle_compute",
+    "owner": "team-platform",
+    "priority_score": 120.0,
+    "estimated_monthly_savings_usd": 120.0
+  },
+  {
+    "resource_id": "disk-orphan-1",
+    "type": "orphaned_storage",
+    "owner": "team-data",
+    "priority_score": 48.0,
+    "estimated_monthly_savings_usd": 64.0
+  },
+  {
+    "resource_id": "db-rightsize-1",
+    "type": "rightsizing",
+    "owner": "team-app",
+    "priority_score": 90.0,
+    "estimated_monthly_savings_usd": 300.0
+  }
+]
