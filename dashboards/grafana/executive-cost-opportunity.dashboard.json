@@ -1,0 +1,66 @@
+{
+  "title": "FinOps Executive - Cost and Opportunity",
+  "description": "Executive summary of spend trend, optimization opportunity, and realized savings.",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "tags": ["finops", "executive", "phase4"],
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Monthly Cloud Spend (USD)",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(finops_monthly_spend_usd)"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Addressable Opportunity (USD)",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(finops_opportunity_monthly_usd)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Spend Trend by Provider",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(provider) (finops_daily_spend_usd)"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "bargauge",
+      "title": "Top Opportunity Types",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(5, sum by(type) (finops_opportunity_monthly_usd))"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Realized Savings MTD (USD)",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum(finops_realized_savings_mtd_usd)"
+        }
+      ]
+    }
+  ]
+}
