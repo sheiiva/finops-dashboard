@@ -32,6 +32,7 @@ Deliverables:
 - Normalized schema v1
 - GCP collectors (inventory, utilization, cost)
 - Data quality and freshness checks
+- Example normalized records for contract validation
 
 Outcome:
 - Reliable telemetry foundation for optimization decisions.
