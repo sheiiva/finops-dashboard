@@ -1,0 +1,37 @@
+{
+  "title": "FinOps Spend Forecast Baseline",
+  "description": "Actual monthly spend vs moving-average forecast and MAPE panel.",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "tags": ["finops", "forecast", "phase6"],
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Monthly spend vs forecast",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_monthly_spend_usd"
+        },
+        {
+          "refId": "B",
+          "expr": "finops_monthly_spend_forecast_usd"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "Forecast MAPE % (walk-forward)",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_spend_forecast_mape_percent"
+        }
+      ]
+    }
+  ]
+}
