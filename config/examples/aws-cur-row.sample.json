@@ -1,0 +1,13 @@
+{
+  "line_item_resource_id": "arn:aws:ec2:us-east-1:123456789012:instance/i-0abc",
+  "line_item_line_item_type": "Usage",
+  "product_servicecode": "AmazonEC2",
+  "product_region": "us-east-1",
+  "line_item_unblended_cost": "42.50",
+  "line_item_currency_code": "USD",
+  "line_item_usage_amount": "720",
+  "line_item_usage_type": "BoxUsage:t3.medium",
+  "line_item_usage_start_date": "2024-06-01T00:00:00Z",
+  "resource_tags_user_environment": "prod",
+  "resource_tags_user_owner": "team-platform"
+}
