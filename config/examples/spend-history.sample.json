@@ -1,0 +1,8 @@
+[
+  { "period": "2024-01", "amount_usd": 100000 },
+  { "period": "2024-02", "amount_usd": 105000 },
+  { "period": "2024-03", "amount_usd": 102000 },
+  { "period": "2024-04", "amount_usd": 110000 },
+  { "period": "2024-05", "amount_usd": 108000 },
+  { "period": "2024-06", "amount_usd": 112000 }
+]
