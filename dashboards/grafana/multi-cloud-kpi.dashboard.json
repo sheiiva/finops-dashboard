@@ -1,0 +1,55 @@
+{
+  "title": "FinOps Multi-Cloud KPI",
+  "description": "Unified KPIs with provider dimension and owner attribution.",
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "editable": true,
+  "tags": ["finops", "multi-cloud", "phase7"],
+  "panels": [
+    {
+      "id": 1,
+      "type": "piechart",
+      "title": "Monthly spend by provider",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(provider) (finops_monthly_spend_usd)"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "bargauge",
+      "title": "Opportunity by provider",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(provider) (finops_opportunity_monthly_usd)"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "table",
+      "title": "Action queue with provider and owner",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_action_queue"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Tag compliance by provider (min)",
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "min by(provider) (finops_tag_compliance_ratio)"
+        }
+      ]
+    }
+  ]
+}
