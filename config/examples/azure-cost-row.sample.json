@@ -1,0 +1,15 @@
+{
+  "ResourceId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-demo/providers/Microsoft.Compute/virtualMachines/vm-demo",
+  "ResourceType": "Microsoft.Compute/virtualMachines",
+  "ServiceName": "Virtual Machines",
+  "ResourceLocation": "eastus",
+  "CostInBillingCurrency": 55.0,
+  "BillingCurrencyCode": "USD",
+  "ConsumedQuantity": 24,
+  "UnitOfMeasure": "Hours",
+  "UsageDate": "2024-06-01T00:00:00Z",
+  "tags": {
+    "Environment": "prod",
+    "Owner": "team-data"
+  }
+}
