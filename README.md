@@ -18,6 +18,12 @@ This repository is designed as a reusable FinOps accelerator template for real c
 
 The implementation path starts with GCP and then extends to AWS and Azure through a provider adapter model so the same framework can be parameterized and reused across companies.
 
+## Visual Portfolio Demo
+
+- GitHub Pages site: `https://sheiiva.github.io/finops-dashboard/`
+- Source: `site/`
+- Deployment workflow: `.github/workflows/pages.yml`
+
 ## Technical Stack
 
 - Prometheus and Grafana deployed with Helm

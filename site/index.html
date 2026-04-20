@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FinOps Dashboard Portfolio</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <h1>FinOps Dashboard Portfolio</h1>
+      <p>
+        Reusable multi-cloud FinOps accelerator. Focus: waste detection, prioritized action
+        queue, and measurable savings governance.
+      </p>
+      <div class="chips">
+        <span>GCP</span>
+        <span>AWS</span>
+        <span>Azure</span>
+        <span>Terraform</span>
+        <span>Grafana</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="grid">
+        <article class="card">
+          <h2>Pipeline maturity</h2>
+          <ul>
+            <li>CI quality gates (`ruff`, `pytest`, docs checks)</li>
+            <li>Terraform fmt/validate workflow</li>
+            <li>CodeQL + dependency review</li>
+            <li>Conventional Commits enforcement</li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h2>Detected opportunities</h2>
+          <div class="kpi-row">
+            <div>
+              <strong>Idle compute</strong>
+              <p>1 candidate</p>
+            </div>
+            <div>
+              <strong>Orphaned storage</strong>
+              <p>2 candidates</p>
+            </div>
+            <div>
+              <strong>Top score</strong>
+              <p>120.0</p>
+            </div>
+          </div>
+          <small>Values from repository sample artifacts (Phase 3/4).</small>
+        </article>
+      </section>
+
+      <section class="card">
+        <h2>Multi-cloud KPI snapshot</h2>
+        <p>Unified metric model with provider parity and owner attribution.</p>
+        <div class="bars">
+          <div class="bar" style="--h: 86%">
+            <span>GCP</span>
+          </div>
+          <div class="bar" style="--h: 64%">
+            <span>AWS</span>
+          </div>
+          <div class="bar" style="--h: 58%">
+            <span>Azure</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Quick links</h2>
+        <ul>
+          <li><a href="../docs/roadmap.md">Roadmap (P0-P7)</a></li>
+          <li><a href="../docs/architecture.md">Architecture</a></li>
+          <li><a href="../docs/kpi-definitions.md">KPI definitions</a></li>
+          <li><a href="../docs/finops-cadence-raci.md">Operating cadence and RACI</a></li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
