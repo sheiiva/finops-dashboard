@@ -47,13 +47,30 @@ test -d docs
 Expected output:
 - command exits with status `0`
 
-## 5) Work with issues and milestones
+## 5) Local visual dashboard validation
+
+Use Docker Compose stack plus sample metric injection:
+
+```bash
+chmod +x scripts/local_dashboard_stack.sh scripts/inject_sample_metrics.sh
+./scripts/local_dashboard_stack.sh up
+./scripts/local_dashboard_stack.sh inject
+```
+
+Then open:
+
+- Grafana: `http://localhost:3000` (`admin` / `admin`)
+- Prometheus: `http://localhost:9090`
+
+Reference: `docs/local-dashboard-validation.md`
+
+## 6) Work with issues and milestones
 
 1. Pick an issue from current milestone.
 2. Create branch: `feat/<issue-id>-<slug>` or `chore/<issue-id>-<slug>`.
 3. Open PR with linked issue and test evidence.
 
-## 6) Verify board workflow
+## 7) Verify board workflow
 
 - Issue moves: `Todo` -> `In Progress` -> `Done`
 - Keep one active `In Progress` item at a time.

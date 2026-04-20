@@ -1,0 +1,14 @@
+finops_monthly_spend_usd{provider="gcp"} 125000
+finops_monthly_spend_usd{provider="aws"} 60000
+finops_monthly_spend_usd{provider="azure"} 42000
+finops_opportunity_monthly_usd{provider="gcp",type="idle_compute"} 18000
+finops_opportunity_monthly_usd{provider="gcp",type="orphaned_storage"} 12000
+finops_opportunity_monthly_usd{provider="aws",type="rightsizing"} 9000
+finops_opportunity_monthly_usd{provider="azure",type="idle_compute"} 7000
+finops_realized_savings_mtd_usd 8000
+finops_tag_compliance_ratio{provider="gcp"} 0.94
+finops_tag_compliance_ratio{provider="aws"} 0.91
+finops_tag_compliance_ratio{provider="azure"} 0.89
+finops_action_queue{provider="gcp",owner="team-platform",resource_id="vm-idle-1"} 120
+finops_action_queue{provider="aws",owner="team-core",resource_id="ri-rightsize-1"} 90
+finops_action_queue{provider="azure",owner="team-data",resource_id="disk-orphan-1"} 48
