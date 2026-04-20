@@ -1,0 +1,124 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: #0b1220;
+  color: #e6edf3;
+}
+
+.hero {
+  padding: 3rem 1.5rem;
+  border-bottom: 1px solid #263042;
+  background: linear-gradient(180deg, #111a2d 0%, #0b1220 100%);
+}
+
+.hero h1 {
+  margin: 0 0 0.5rem;
+  font-size: 2rem;
+}
+
+.hero p {
+  margin: 0;
+  max-width: 860px;
+  color: #b8c4d7;
+}
+
+.chips {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chips span {
+  border: 1px solid #37517a;
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: #101a2d;
+  border: 1px solid #253550;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+}
+
+.card p,
+.card li,
+.card small,
+.card a {
+  color: #c6d3e3;
+}
+
+.card a {
+  text-decoration: none;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.kpi-row strong {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.kpi-row p {
+  margin: 0.2rem 0 0;
+}
+
+.bars {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  min-height: 180px;
+  padding-top: 0.75rem;
+}
+
+.bar {
+  height: var(--h);
+  width: 90px;
+  background: linear-gradient(180deg, #4d8dff 0%, #265ec4 100%);
+  border-radius: 8px 8px 0 0;
+  position: relative;
+}
+
+.bar span {
+  position: absolute;
+  bottom: -1.7rem;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #aebad1;
+  font-size: 0.85rem;
+}
