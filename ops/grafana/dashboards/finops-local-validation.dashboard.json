@@ -1,0 +1,81 @@
+{
+  "id": null,
+  "uid": "finops-local",
+  "title": "FinOps Local Validation",
+  "tags": ["finops", "local", "validation"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "editable": true,
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Monthly Spend by Provider",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus-local" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(provider) (finops_monthly_spend_usd)",
+          "legendFormat": "{{provider}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "bargauge",
+      "title": "Opportunity by Provider",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus-local" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by(provider) (finops_opportunity_monthly_usd)",
+          "legendFormat": "{{provider}}"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Realized Savings MTD (USD)",
+      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus-local" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_realized_savings_mtd_usd"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "table",
+      "title": "Action Queue (Owner/Provider/Resource)",
+      "gridPos": { "h": 12, "w": 16, "x": 8, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "prometheus-local" },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_action_queue"
+        }
+      ]
+    }
+  ],
+  "templating": { "list": [] },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  }
+}
