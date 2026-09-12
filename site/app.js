@@ -191,6 +191,60 @@ function renderTrendList(el, rows, emptyLabel) {
     .join("");
 }
 
+const typeLabels = {
+  growth_anomaly: "MoM growth spike",
+  discount_gap: "Discount / CU coverage",
+  new_service_review: "New service ownership",
+  idle_candidate: "Possible idle spend",
+};
+
+function renderOpportunities(elBreakdown, elList, actions, totalUsd) {
+  const byType = {};
+  for (const a of actions || []) {
+    const key = a.type || "other";
+    if (!byType[key]) byType[key] = { count: 0, savings: 0 };
+    byType[key].count += 1;
+    byType[key].savings += a.est_monthly_savings_usd || 0;
+  }
+  const types = Object.entries(byType).sort((a, b) => b[1].savings - a[1].savings);
+  const maxType = Math.max(...types.map(([, v]) => v.savings), 1);
+
+  elBreakdown.innerHTML = types
+    .map(([type, v]) => {
+      const label = typeLabels[type] || type;
+      const share = totalUsd ? Math.round((v.savings / totalUsd) * 100) : 0;
+      return `
+        <div class="opp-type">
+          <div class="opp-type-top">
+            <strong>${label}</strong>
+            <span class="opp-type-amt">${moneyExact(v.savings)} · ${v.count}</span>
+          </div>
+          <div class="opp-type-track">
+            <div class="opp-type-fill" style="--w:${Math.max(6, (v.savings / maxType) * 100)}%"></div>
+          </div>
+          <span class="opp-type-share">${share}% of addressable</span>
+        </div>`;
+    })
+    .join("");
+
+  const ranked = [...(actions || [])].sort(
+    (a, b) => (b.est_monthly_savings_usd || 0) - (a.est_monthly_savings_usd || 0)
+  );
+  elList.innerHTML = ranked
+    .map((a) => {
+      const why = typeLabels[a.type] || a.type;
+      return `
+      <article class="opp-item" role="listitem">
+        <div class="opp-item-main">
+          <h3>${a.service}</h3>
+          <p>${why}${a.service_id ? ` · ${a.service_id}` : ""}</p>
+        </div>
+        <div class="opp-item-save">${moneyExact(a.est_monthly_savings_usd)}/mo</div>
+      </article>`;
+    })
+    .join("");
+}
+
 function renderQueue(el, actions) {
   el.innerHTML = actions
     .map((a) => {
@@ -269,6 +323,12 @@ async function main() {
   document.getElementById("opportunity-total").textContent = `${money(
     data.opportunity_total_usd
   )} addressable this period`;
+  renderOpportunities(
+    document.getElementById("opp-breakdown"),
+    document.getElementById("opp-list"),
+    data.actions || [],
+    data.opportunity_total_usd
+  );
   renderQueue(document.getElementById("action-queue"), data.actions || []);
   renderAlerts(document.getElementById("alert-row"), data.alerts || {});
   document.getElementById("disclaimer").textContent =
