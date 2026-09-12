@@ -2,8 +2,14 @@
 
 from pathlib import Path
 
-from scripts.csv_billing_to_metrics import build_opportunities, load_services, render_prom, build_messages, build_alerts
-
+from scripts.csv_billing_to_metrics import (
+    build_alerts,
+    build_messages,
+    build_opportunities,
+    build_site_snapshot,
+    load_services,
+    render_prom,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 CSV = ROOT / "config/examples/gcp-billing-services.sample.csv"
@@ -31,18 +37,10 @@ def test_opportunities_and_prom_contain_v1_sections() -> None:
     assert "Cloud Composer" in prom
     assert opportunities
     assert all(0 <= o["priority_score"] <= 100 for o in opportunities)
-    assert "owner: FinOps" in opportunities[0]["message"] or "owner:" in opportunities[0]["message"]
+    assert "owner:" in opportunities[0]["message"]
 
 
 def test_site_snapshot_has_showcase_fields() -> None:
-    from scripts.csv_billing_to_metrics import (
-        build_alerts,
-        build_messages,
-        build_opportunities,
-        build_site_snapshot,
-        load_services,
-    )
-
     services, invoice = load_services(CSV)
     opportunities = build_opportunities(services, invoice)
     alerts = build_alerts(services, opportunities)

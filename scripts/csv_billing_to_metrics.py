@@ -277,7 +277,7 @@ def render_prom(
     lines: list[str] = [
         "# HELP finops_demo_info Synthetic FinOps demo metrics from billing CSV",
         "# TYPE finops_demo_info gauge",
-        f'finops_demo_info{{pack="v1-slim",source="gcp-billing-services.sample.csv"}} 1',
+        'finops_demo_info{pack="v1-slim",source="gcp-billing-services.sample.csv"} 1',
         "# HELP finops_gcp_cost_total_usd Invoice total USD",
         "# TYPE finops_gcp_cost_total_usd gauge",
         f"finops_gcp_cost_total_usd {invoice_total}",
