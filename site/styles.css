@@ -37,40 +37,48 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   display: grid;
-  align-items: end;
+  align-items: center;
   padding: clamp(1.5rem, 4vw, 3.5rem);
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(900px 480px at 85% 15%, rgba(14, 116, 144, 0.09), transparent 60%),
+    radial-gradient(900px 480px at 70% 20%, rgba(14, 116, 144, 0.1), transparent 60%),
     linear-gradient(180deg, #fbfcfd 0%, var(--paper) 100%);
 }
 
+.hero-frame {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(20rem, 26rem) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: end;
+  position: relative;
+}
+
 .hero-copy {
-  max-width: 36rem;
   z-index: 2;
   padding: 1.5rem 1.35rem 1.35rem;
-  margin-bottom: clamp(0.5rem, 3vh, 2rem);
   background: var(--panel);
   border: 1px solid rgba(11, 18, 32, 0.08);
   backdrop-filter: blur(8px);
 }
 
 .hero-visual {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: flex-end;
-  justify-content: flex-end;
+  justify-content: stretch;
+  min-height: min(58vh, 420px);
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.9;
 }
 
 .hero-chart {
-  width: min(58vw, 680px);
-  height: min(82vh, 580px);
-  min-height: 300px;
+  width: 100%;
+  height: min(58vh, 420px);
+  min-height: 280px;
 }
 
 .brand {
@@ -772,27 +780,20 @@ main {
     align-items: start;
   }
 
-  .hero-copy {
-    margin-bottom: 0;
+  .hero-frame {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .hero-visual {
-    position: relative;
-    inset: auto;
-    min-height: 200px;
-    opacity: 0.7;
-    margin: 0 0 1rem;
     order: -1;
-  }
-
-  .hero {
-    display: flex;
-    flex-direction: column;
+    min-height: 200px;
+    opacity: 0.85;
   }
 
   .hero-chart {
-    width: 100%;
     height: 220px;
+    min-height: 200px;
   }
 
   .metric-strip {
