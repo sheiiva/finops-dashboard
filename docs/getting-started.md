@@ -49,12 +49,28 @@ Expected output:
 
 ## 5) Local visual dashboard validation
 
-Use Docker Compose stack plus sample metric injection:
+Use Docker Compose stack plus CSV demo metric injection (v1 slim: A B C F G J):
 
 ```bash
 chmod +x scripts/local_dashboard_stack.sh scripts/inject_sample_metrics.sh
 ./scripts/local_dashboard_stack.sh up
-./scripts/local_dashboard_stack.sh inject
+./scripts/local_dashboard_stack.sh inject-csv
+```
+
+See `docs/local-dashboard-validation.md` for the section map and UI URLs.
+
+For real GCP API-backed metrics (auto-discovery path):
+
+```bash
+./scripts/local_dashboard_stack.sh inject-gcp
+```
+
+Optional explicit override:
+
+```bash
+export GCP_PROJECT_ID="<your-gcp-project-id>"
+export BILLING_EXPORT_TABLE="<project.dataset.table>"
+./scripts/local_dashboard_stack.sh inject-gcp
 ```
 
 Then open:

@@ -4,44 +4,49 @@
 
 ## Business Value
 
-This project provides direct cost savings by detecting cloud waste, quantifying monthly loss, and presenting prioritized optimization opportunities for engineering and finance stakeholders.
+Native cloud consoles explain **where money is spent**. This project adds the execution layer: prioritized actions, explicit ownership, estimated savings, and a clear path to verify outcomes.
 
-## Why This Exists Beyond Native Cloud Cost Dashboards
+## What v1 demonstrates (portfolio showcase)
 
-Google Cloud already provides strong cost visibility. This project complements it by adding an execution layer: prioritized actions, explicit ownership, estimated savings per action, and operational governance to ensure recommendations are implemented without breaking reliability targets.
+**Google Cloud–first** CSV demo — not a live billing login.
 
-In short, native dashboards explain **where money is spent**; this project drives **what to do next, who does it, and how savings are verified**.
+1. Public product UI (GitHub Pages): spend → trend → opportunities → owner action queue  
+2. Same CSV feeds a local Prometheus + Grafana **evidence** stack for screenshots / client handoff  
+3. Synthetic costs with **real Google Cloud service names and public service IDs**
 
-## Interview Portfolio Positioning
+Live site: https://sheiiva.github.io/finops-dashboard/
 
-This repository is designed as a reusable FinOps accelerator template for real client delivery. It demonstrates platform engineering depth (IaC, observability, security, automation) and operating-model maturity (ownership, governance, runbooks, measurable outcomes), not only dashboard creation.
+```bash
+./scripts/local_dashboard_stack.sh up
+./scripts/local_dashboard_stack.sh inject-csv
+```
 
-The implementation path starts with GCP and then extends to AWS and Azure through a provider adapter model so the same framework can be parameterized and reused across companies.
+See `docs/local-dashboard-validation.md`.
 
-## Visual Portfolio Demo
+## Version map
 
-- GitHub Pages site: `https://sheiiva.github.io/finops-dashboard/`
-- Source: `site/`
-- Deployment workflow: `.github/workflows/pages.yml`
+| Version | Scope |
+|---|---|
+| **v1** | Pages wow showcase + CSV pipeline + Grafana evidence (this release bar) |
+| **v1.1** | Deeper sections (Pareto, savings lines, allocation, forecast) |
+| **v2** | Live Google Cloud API / billing export streaming |
+| **v3** | AWS / Azure adapters (later) |
 
-## Technical Stack
+## Interview / freelance positioning
 
-- Prometheus and Grafana deployed with Helm
-- Python-based cost discovery scripts using cloud SDKs
-- Cloud asset analysis for unused storage, idle compute, and oversizing
-- Kubernetes resource-rightsizing checks for non-compliant workloads
-- Savings-focused dashboarding with estimated monthly USD impact
+Reusable FinOps accelerator template: product narrative on Pages, ops depth in repo (schema, adapters, detection, runbooks, CI). Starts on Google Cloud; multi-cloud is explicitly later.
 
-## Directory Layout
+## Directory layout
 
-- `terraform/`: dashboard platform and monitoring IaC baseline
-- `scripts/`: data collection and enrichment logic for waste detection
-- `docs/`: KPI definitions, dashboard specifications, and operating model
+- `site/`: public product showcase  
+- `config/examples/`: anonymized billing CSV + generated snapshot/metrics  
+- `scripts/`: CSV→metrics/snapshot, collectors, detection helpers  
+- `ops/grafana/`: local evidence dashboard provisioning  
+- `docs/`: architecture, KPIs, runbooks, roadmap  
+- `terraform/`: module skeleton for future platform resources  
 
-## Delivery and Governance
+## Delivery docs
 
-- Roadmap and milestones: `docs/roadmap.md`
-- Architecture and adapter model: `docs/architecture.md`
-- Local bootstrap steps: `docs/getting-started.md`
-- Decision records: `docs/decision-log/`
-- Contribution workflow: `CONTRIBUTING.md`
+- Roadmap: `docs/roadmap.md`  
+- Architecture: `docs/architecture.md`  
+- Getting started: `docs/getting-started.md`  

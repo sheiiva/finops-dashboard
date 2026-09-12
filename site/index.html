@@ -3,82 +3,135 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FinOps Dashboard Portfolio</title>
+    <title>FinOps Dashboard — Google Cloud cost actions</title>
+    <meta
+      name="description"
+      content="Google Cloud FinOps showcase: spend, trend, ranked opportunities, and an owner action queue."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Sora:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <header class="hero">
-      <h1>FinOps Dashboard Portfolio</h1>
-      <p>
-        Reusable multi-cloud FinOps accelerator. Focus: waste detection, prioritized action
-        queue, and measurable savings governance.
-      </p>
-      <div class="chips">
-        <span>GCP</span>
-        <span>AWS</span>
-        <span>Azure</span>
-        <span>Terraform</span>
-        <span>Grafana</span>
+    <header class="hero" id="top">
+      <div class="hero-visual" aria-hidden="true">
+        <svg class="hero-chart" id="hero-chart" viewBox="0 0 640 420" role="img"></svg>
+      </div>
+      <div class="hero-copy">
+        <p class="brand">FinOps Dashboard</p>
+        <p class="cloud-line">Google Cloud</p>
+        <h1>Turn cloud waste into owned, ranked actions.</h1>
+        <p class="lede">
+          See spend, surface savings, and assign the next fix — before finance asks again.
+        </p>
+        <div class="outcome-strip" id="outcome-strip" aria-label="Demo outcomes"></div>
+        <div class="cta-row">
+          <a class="cta primary" href="#spend">Walk the demo</a>
+          <a class="cta ghost" href="#evidence">See how it’s built</a>
+        </div>
       </div>
     </header>
 
     <main>
-      <section class="grid">
-        <article class="card">
-          <h2>Pipeline maturity</h2>
-          <ul>
-            <li>CI quality gates (`ruff`, `pytest`, docs checks)</li>
-            <li>Terraform fmt/validate workflow</li>
-            <li>CodeQL + dependency review</li>
-            <li>Conventional Commits enforcement</li>
-          </ul>
-        </article>
-
-        <article class="card">
-          <h2>Detected opportunities</h2>
-          <div class="kpi-row">
-            <div>
-              <strong>Idle compute</strong>
-              <p>1 candidate</p>
-            </div>
-            <div>
-              <strong>Orphaned storage</strong>
-              <p>2 candidates</p>
-            </div>
-            <div>
-              <strong>Top score</strong>
-              <p>120.0</p>
-            </div>
-          </div>
-          <small>Values from repository sample artifacts (Phase 3/4).</small>
-        </article>
+      <section class="block" id="spend" data-reveal>
+        <p class="kicker">Spend</p>
+        <h2>What did we spend?</h2>
+        <p class="section-msg" data-msg="A">Loading snapshot…</p>
+        <div class="metric-strip" id="metric-strip"></div>
+        <div class="compare" id="spend-compare" aria-label="Period comparison"></div>
       </section>
 
-      <section class="card">
-        <h2>Multi-cloud KPI snapshot</h2>
-        <p>Unified metric model with provider parity and owner attribution.</p>
-        <div class="bars">
-          <div class="bar" style="--h: 86%">
-            <span>GCP</span>
+      <section class="block" id="drivers" data-reveal>
+        <p class="kicker">Drivers</p>
+        <h2>Where does the money go?</h2>
+        <p class="section-msg" data-msg="B"></p>
+        <div class="driver-chart" id="driver-chart"></div>
+      </section>
+
+      <section class="block" id="growth" data-reveal>
+        <p class="kicker">Trend</p>
+        <h2>How does this period compare?</h2>
+        <p class="section-msg" data-msg="C"></p>
+        <div class="trend-grid">
+          <div>
+            <h3 class="trend-heading">Top risers</h3>
+            <div class="trend-list" id="trend-risers"></div>
           </div>
-          <div class="bar" style="--h: 64%">
-            <span>AWS</span>
-          </div>
-          <div class="bar" style="--h: 58%">
-            <span>Azure</span>
+          <div>
+            <h3 class="trend-heading">Top fallers</h3>
+            <div class="trend-list" id="trend-fallers"></div>
           </div>
         </div>
       </section>
 
-      <section class="card">
-        <h2>Quick links</h2>
-        <ul>
-          <li><a href="../docs/roadmap.md">Roadmap (P0-P7)</a></li>
-          <li><a href="../docs/architecture.md">Architecture</a></li>
-          <li><a href="../docs/kpi-definitions.md">KPI definitions</a></li>
-          <li><a href="../docs/finops-cadence-raci.md">Operating cadence and RACI</a></li>
-        </ul>
+      <section class="block" id="opportunities" data-reveal>
+        <p class="kicker">Opportunities</p>
+        <h2>Where can we recover spend?</h2>
+        <p class="section-msg" data-msg="F"></p>
+        <p class="opportunity-total" id="opportunity-total"></p>
+      </section>
+
+      <section class="block" id="actions" data-reveal>
+        <p class="kicker">Action queue</p>
+        <h2>Who does what next?</h2>
+        <p class="section-msg" data-msg="G"></p>
+        <div class="queue" id="action-queue" role="list"></div>
+      </section>
+
+      <section class="block" id="alerts" data-reveal>
+        <p class="kicker">Alerts</p>
+        <h2>What needs attention now?</h2>
+        <p class="section-msg" data-msg="J"></p>
+        <div class="alert-row" id="alert-row"></div>
+      </section>
+
+      <section class="block evidence" id="evidence" data-reveal>
+        <p class="kicker">How it’s built</p>
+        <h2>Same CSV, ops stack.</h2>
+        <p>
+          This Pages showcase is the product front door. The same billing CSV feeds a local
+          Prometheus + Grafana evidence stack for client handoff and screenshots.
+        </p>
+        <figure class="evidence-figure">
+          <img
+            src="./assets/grafana-evidence.svg"
+            alt="Local Grafana FinOps evidence dashboard fed by the same CSV snapshot"
+            width="960"
+            height="540"
+            loading="lazy"
+          />
+          <figcaption>Same CSV, ops stack — local Grafana evidence (not the public landing page).</figcaption>
+        </figure>
+        <p class="evidence-links">
+          <a href="https://github.com/sheiiva/finops-dashboard">Repository</a>
+          <a href="https://github.com/sheiiva/finops-dashboard/blob/main/docs/local-dashboard-validation.md"
+            >Local runbook</a
+          >
+          <a href="https://github.com/sheiiva/finops-dashboard/blob/main/docs/architecture.md"
+            >Architecture</a
+          >
+        </p>
+        <p class="fineprint" id="disclaimer"></p>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <nav class="footer-rail" aria-label="Project links">
+        <a href="https://github.com/sheiiva/finops-dashboard">Repo</a>
+        <a href="https://github.com/sheiiva/finops-dashboard/blob/main/docs/local-dashboard-validation.md"
+          >Runbook</a
+        >
+        <a href="https://github.com/sheiiva/finops-dashboard/blob/main/docs/architecture.md"
+          >Architecture</a
+        >
+        <span>Demo generated from billing CSV</span>
+      </nav>
+    </footer>
+
+    <script src="./app.js" type="module"></script>
   </body>
 </html>

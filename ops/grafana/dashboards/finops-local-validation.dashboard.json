@@ -1,81 +1,699 @@
 {
   "id": null,
   "uid": "finops-local",
-  "title": "FinOps Local Validation",
-  "tags": ["finops", "local", "validation"],
+  "title": "FinOps v1 Slim (CSV demo)",
+  "description": "Evidence layer for v1 \u2014 sections A B C F G J. v1.1 adds D E H I K. Pages is the product front door.",
+  "tags": [
+    "finops",
+    "gcp",
+    "v1-slim",
+    "csv-demo"
+  ],
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 1,
+  "version": 3,
   "refresh": "30s",
   "editable": true,
   "panels": [
     {
+      "id": 100,
+      "type": "text",
+      "title": "FinOps v1 slim \u00b7 demo pack",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "**Demo window 2025-01-01 \u2192 2025-02-28**  \nSynthetic anonymized demo data \u2014 not a real customer invoice.  \n\nNarrative: **Spend \u2192 Drivers \u2192 Risks \u2192 Actions \u2192 Alerts**  \nSections: A \u00b7 B \u00b7 C \u00b7 F \u00b7 G \u00b7 J *(D/E/H/I/K deferred to v1.1)*"
+      }
+    },
+    {
+      "id": 101,
+      "type": "text",
+      "title": "A \u00b7 Executive summary",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Demo invoice $7,335.08 across 25 services. Top driver: Cloud Composer ($1,459.45, 20% of total). Comparable spend is up 36% vs prior period (~$5,329 \u2192 $7,266)."
+      }
+    },
+    {
       "id": 1,
-      "type": "timeseries",
-      "title": "Monthly Spend by Provider",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
-      "datasource": { "type": "prometheus", "uid": "prometheus-local" },
+      "type": "stat",
+      "title": "Invoice total (USD)",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(provider) (finops_monthly_spend_usd)",
-          "legendFormat": "{{provider}}"
+          "expr": "finops_gcp_cost_total_usd"
         }
-      ]
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2
+        }
+      }
     },
     {
       "id": 2,
-      "type": "bargauge",
-      "title": "Opportunity by Provider",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
-      "datasource": { "type": "prometheus", "uid": "prometheus-local" },
+      "type": "stat",
+      "title": "Services billed",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
       "targets": [
         {
           "refId": "A",
-          "expr": "sum by(provider) (finops_opportunity_monthly_usd)",
-          "legendFormat": "{{provider}}"
+          "expr": "finops_gcp_service_count"
         }
       ]
     },
     {
       "id": 3,
       "type": "stat",
-      "title": "Realized Savings MTD (USD)",
-      "gridPos": { "h": 6, "w": 8, "x": 0, "y": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus-local" },
+      "title": "Addressable opportunity (USD)",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
       "targets": [
         {
           "refId": "A",
-          "expr": "finops_realized_savings_mtd_usd"
+          "expr": "finops_opportunity_monthly_usd"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Top service share",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 5
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(1, finops_gcp_service_share_ratio)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 1
+        }
+      }
+    },
+    {
+      "id": 102,
+      "type": "text",
+      "title": "B \u00b7 Spend by service",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 9
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Ranked 25 services by subtotal; focus top 5 for ownership reviews."
+      }
+    },
+    {
+      "id": 5,
+      "type": "bargauge",
+      "title": "Cost by service (USD)",
+      "gridPos": {
+        "h": 10,
+        "w": 14,
+        "x": 0,
+        "y": 11
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "topk(12, finops_gcp_cost_service_usd)",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "table",
+      "title": "Service share of invoice",
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 14,
+        "y": 11
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_gcp_service_share_ratio",
+          "format": "table",
+          "instant": true
+        }
+      ],
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true
+            },
+            "renameByName": {
+              "service": "Service",
+              "Value": "Share"
+            }
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Share"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "decimals",
+                "value": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": 103,
+      "type": "text",
+      "title": "C \u00b7 Growth & anomalies",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Fastest riser: Workflows (153%). 3 service(s) marked New."
+      }
+    },
+    {
+      "id": 7,
+      "type": "bargauge",
+      "title": "MoM change by service",
+      "gridPos": {
+        "h": 8,
+        "w": 14,
+        "x": 0,
+        "y": 23
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_gcp_service_mom_change_ratio",
+          "legendFormat": "{{service}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "table",
+      "title": "New services this period",
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 14,
+        "y": 23
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_gcp_service_is_new == 1",
+          "format": "table",
+          "instant": true
+        }
+      ],
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "Value": true
+            },
+            "renameByName": {
+              "service": "Service"
+            }
+          }
         }
       ]
     },
     {
-      "id": 4,
-      "type": "table",
-      "title": "Action Queue (Owner/Provider/Resource)",
-      "gridPos": { "h": 12, "w": 16, "x": 8, "y": 8 },
-      "datasource": { "type": "prometheus", "uid": "prometheus-local" },
+      "id": 104,
+      "type": "text",
+      "title": "F \u00b7 Waste & opportunities (demo heuristics)",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "7 heuristic opportunities from MoM growth, new services, and savings pressure."
+      }
+    },
+    {
+      "id": 9,
+      "type": "bargauge",
+      "title": "Estimated savings by opportunity",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 33
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient"
+      },
       "targets": [
         {
           "refId": "A",
-          "expr": "finops_action_queue"
+          "expr": "finops_gcp_recommendation_savings_usd",
+          "legendFormat": "{{type}} \u00b7 {{service}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": "piechart",
+      "title": "Opportunity mix by type",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 33
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (type) (finops_gcp_recommendation_savings_usd)",
+          "legendFormat": "{{type}}"
         }
       ]
+    },
+    {
+      "id": 105,
+      "type": "text",
+      "title": "G \u00b7 Action queue",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 41
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "7 actions queued; top: Investigate 89% MoM spike on Cloud Run Functions \u2014 owner: FinOps"
+      }
+    },
+    {
+      "id": 11,
+      "type": "table",
+      "title": "Prioritized actions",
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 43
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_action_queue",
+          "format": "table",
+          "instant": true
+        },
+        {
+          "refId": "B",
+          "expr": "finops_gcp_recommendation_savings_usd",
+          "format": "table",
+          "instant": true
+        }
+      ],
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true
+            },
+            "renameByName": {
+              "service": "Service",
+              "type": "Type",
+              "owner": "Owner",
+              "Value #A": "Priority score",
+              "Value #B": "Est. savings USD"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "Priority score",
+                "desc": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": 106,
+      "type": "text",
+      "title": "J \u00b7 Alerts & messages",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 52
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Active demo alerts: spend_spike, service_growth, open_actions."
+      }
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "Spend spike",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 54
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_gcp_alert_flag{alert=\"spend_spike\"}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "OK",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "ACTIVE",
+                  "color": "red"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": "stat",
+      "title": "Service growth",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 54
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_gcp_alert_flag{alert=\"service_growth\"}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "OK",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "ACTIVE",
+                  "color": "orange"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "stat",
+      "title": "Open actions",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 54
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_gcp_alert_flag{alert=\"open_actions\"}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Clear",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "Queue",
+                  "color": "blue"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": 15,
+      "type": "stat",
+      "title": "Label compliance drift",
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 54
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_gcp_alert_flag{alert=\"label_compliance_drift\"}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "OK",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "DRIFT",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      }
     }
   ],
-  "templating": { "list": [] },
+  "templating": {
+    "list": []
+  },
   "annotations": {
-    "list": [
-      {
-        "builtIn": 1,
-        "datasource": { "type": "grafana", "uid": "-- Grafana --" },
-        "enable": true,
-        "hide": true,
-        "iconColor": "rgba(0, 211, 255, 1)",
-        "name": "Annotations & Alerts",
-        "type": "dashboard"
-      }
-    ]
+    "list": []
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
   }
 }
