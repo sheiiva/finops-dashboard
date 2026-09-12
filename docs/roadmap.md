@@ -89,3 +89,25 @@ Deliverables:
 
 Outcome:
 - Single FinOps framework across GCP, AWS, and Azure.
+
+## Product versions (current focus)
+
+| Version | What ships | Data source | Tracking |
+|---|---|---|---|
+| **v1** | **Product wow showcase** on GitHub Pages (hero + one-scroll FinOps story). Grafana slim pack as **evidence** only. Real Google Cloud service names; synthetic USD. | Manually exported / anonymized **CSV** | #82, #86 |
+| **v1.1** | Deeper sections (Pareto, savings lines, allocation, forecast) + optional region/project when export supports it | Same CSV path or richer export | #89 |
+| **v2** | **Live Google Cloud API** — connect account, pull/stream costs | Provider APIs (GCP) | #88 |
+| **v3** | AWS / Azure adapters | Multi-cloud | later |
+
+### v1 acceptance (portfolio-ready)
+
+- [x] Real Google Cloud service names + public service IDs (synthetic $)
+- [x] Priority scores clamped 0–100; plain-language action copy with owners
+- [x] Human section labels (no A/B/C ticket kickers)
+- [x] Hero outcome strip: invoice · MoM · addressable · open actions
+- [x] Evidence media + “See how it’s built” CTA
+- [x] Footer rail: Repo · Runbook · Architecture · CSV demo note
+- [x] README aligned to Google-first CSV showcase
+- [ ] Live Pages deploy matches local showcase
+
+CSV remains the offline/demo fallback after v2 so the public showcase never requires live credentials.

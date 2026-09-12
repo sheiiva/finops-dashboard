@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-label="Grafana evidence mock">
+  <rect width="960" height="540" fill="#111827"/>
+  <rect x="0" y="0" width="960" height="48" fill="#0b1220"/>
+  <text x="24" y="30" fill="#e5e7eb" font-family="IBM Plex Sans, Arial, sans-serif" font-size="16" font-weight="700">FinOps v1 Slim (CSV demo)</text>
+  <text x="780" y="30" fill="#9ca3af" font-family="IBM Plex Sans, Arial, sans-serif" font-size="12">Prometheus · local</text>
+  <rect x="24" y="72" width="220" height="100" rx="4" fill="#1f2937" stroke="#374151"/>
+  <text x="40" y="100" fill="#9ca3af" font-size="12" font-family="IBM Plex Sans, Arial, sans-serif">Invoice total</text>
+  <text x="40" y="140" fill="#f9fafb" font-size="28" font-family="IBM Plex Mono, monospace" font-weight="600">$7,335</text>
+  <rect x="260" y="72" width="220" height="100" rx="4" fill="#1f2937" stroke="#374151"/>
+  <text x="276" y="100" fill="#9ca3af" font-size="12" font-family="IBM Plex Sans, Arial, sans-serif">Vs prior</text>
+  <text x="276" y="140" fill="#f87171" font-size="28" font-family="IBM Plex Mono, monospace" font-weight="600">+36%</text>
+  <rect x="496" y="72" width="220" height="100" rx="4" fill="#1f2937" stroke="#374151"/>
+  <text x="512" y="100" fill="#9ca3af" font-size="12" font-family="IBM Plex Sans, Arial, sans-serif">Addressable</text>
+  <text x="512" y="140" fill="#34d399" font-size="28" font-family="IBM Plex Mono, monospace" font-weight="600">$343</text>
+  <rect x="732" y="72" width="204" height="100" rx="4" fill="#1f2937" stroke="#374151"/>
+  <text x="748" y="100" fill="#9ca3af" font-size="12" font-family="IBM Plex Sans, Arial, sans-serif">Open actions</text>
+  <text x="748" y="140" fill="#93c5fd" font-size="28" font-family="IBM Plex Mono, monospace" font-weight="600">7</text>
+  <rect x="24" y="192" width="560" height="220" rx="4" fill="#1f2937" stroke="#374151"/>
+  <text x="40" y="220" fill="#e5e7eb" font-size="14" font-family="IBM Plex Sans, Arial, sans-serif" font-weight="600">Cost by Google Cloud service</text>
+  <rect x="40" y="244" width="420" height="18" fill="#0e7490"/>
+  <rect x="40" y="274" width="360" height="18" fill="#0e7490" opacity="0.85"/>
+  <rect x="40" y="304" width="300" height="18" fill="#0e7490" opacity="0.7"/>
+  <rect x="40" y="334" width="180" height="18" fill="#0e7490" opacity="0.55"/>
+  <rect x="40" y="364" width="140" height="18" fill="#0e7490" opacity="0.4"/>
+  <text x="470" y="258" fill="#d1d5db" font-size="11" font-family="IBM Plex Sans, Arial, sans-serif">Cloud Composer</text>
+  <text x="470" y="288" fill="#d1d5db" font-size="11" font-family="IBM Plex Sans, Arial, sans-serif">Cloud Run</text>
+  <text x="470" y="318" fill="#d1d5db" font-size="11" font-family="IBM Plex Sans, Arial, sans-serif">Compute Engine</text>
+  <text x="470" y="348" fill="#d1d5db" font-size="11" font-family="IBM Plex Sans, Arial, sans-serif">Networking</text>
+  <text x="470" y="378" fill="#d1d5db" font-size="11" font-family="IBM Plex Sans, Arial, sans-serif">Cloud Logging</text>
+  <rect x="600" y="192" width="336" height="220" rx="4" fill="#1f2937" stroke="#374151"/>
+  <text x="616" y="220" fill="#e5e7eb" font-size="14" font-family="IBM Plex Sans, Arial, sans-serif" font-weight="600">Action queue</text>
+  <text x="616" y="255" fill="#f9fafb" font-size="12" font-family="IBM Plex Sans, Arial, sans-serif">100  Investigate 89% MoM spike…</text>
+  <text x="616" y="285" fill="#d1d5db" font-size="12" font-family="IBM Plex Sans, Arial, sans-serif">92  Review discount coverage…</text>
+  <text x="616" y="315" fill="#d1d5db" font-size="12" font-family="IBM Plex Sans, Arial, sans-serif">78  Assign owner for new service…</text>
+  <text x="616" y="345" fill="#9ca3af" font-size="12" font-family="IBM Plex Sans, Arial, sans-serif">Owner · FinOps / Platform</text>
+  <text x="24" y="460" fill="#9ca3af" font-size="12" font-family="IBM Plex Sans, Arial, sans-serif">Evidence layer only — public showcase is GitHub Pages</text>
+  <text x="24" y="500" fill="#6b7280" font-size="11" font-family="IBM Plex Sans, Arial, sans-serif">Fed by config/examples/gcp-billing-services.sample.csv</text>
+</svg>

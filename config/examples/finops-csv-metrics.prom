@@ -1,0 +1,150 @@
+# HELP finops_demo_info Synthetic FinOps demo metrics from billing CSV
+# TYPE finops_demo_info gauge
+finops_demo_info{pack="v1-slim",source="gcp-billing-services.sample.csv"} 1
+# HELP finops_gcp_cost_total_usd Invoice total USD
+# TYPE finops_gcp_cost_total_usd gauge
+finops_gcp_cost_total_usd 7335.08
+# HELP finops_gcp_service_count Number of billed services
+# TYPE finops_gcp_service_count gauge
+finops_gcp_service_count 25
+# HELP finops_gcp_cost_service_usd Cost by service USD
+# TYPE finops_gcp_cost_service_usd gauge
+finops_gcp_cost_service_usd{service="Cloud Composer",service_id="1992-3666-B975",slug="Cloud_Composer"} 1459.45
+finops_gcp_cost_service_usd{service="Cloud Run",service_id="152E-C115-5142",slug="Cloud_Run"} 1269.08
+finops_gcp_cost_service_usd{service="Compute Engine",service_id="6F81-5844-456A",slug="Compute_Engine"} 1161.7
+finops_gcp_cost_service_usd{service="Networking",service_id="E505-1604-58F8",slug="Networking"} 618.32
+finops_gcp_cost_service_usd{service="App Engine",service_id="F17B-412E-CB64",slug="App_Engine"} 540.27
+finops_gcp_cost_service_usd{service="Cloud Logging",service_id="5490-F7B7-8DF6",slug="Cloud_Logging"} 516.99
+finops_gcp_cost_service_usd{service="Cloud SQL",service_id="9662-B51E-5089",slug="Cloud_SQL"} 500.77
+finops_gcp_cost_service_usd{service="Cloud Run Functions",service_id="29E7-DA93-CA13",slug="Cloud_Run_Functions"} 493.74
+finops_gcp_cost_service_usd{service="Cloud Tasks",service_id="F3A6-D7B7-9BDA",slug="Cloud_Tasks"} 324.43
+finops_gcp_cost_service_usd{service="Cloud Dataflow",service_id="57D6-8E6B-2DE0",slug="Cloud_Dataflow"} 161.89
+finops_gcp_cost_service_usd{service="Cloud Monitoring",service_id="58CD-E7C3-72CA",slug="Cloud_Monitoring"} 57.94
+finops_gcp_cost_service_usd{service="Kubernetes Engine",service_id="CCD8-9BF1-090E",slug="Kubernetes_Engine"} 57.35
+finops_gcp_cost_service_usd{service="Cloud Storage",service_id="95FF-2EF5-5EA1",slug="Cloud_Storage"} 41.66
+finops_gcp_cost_service_usd{service="Artifact Registry",service_id="149C-F9EC-3994",slug="Artifact_Registry"} 31.65
+finops_gcp_cost_service_usd{service="Secret Manager",service_id="EE82-7A5E-871C",slug="Secret_Manager"} 20.8
+finops_gcp_cost_service_usd{service="Cloud Build",service_id="8B5D-EF7D-EB12",slug="Cloud_Build"} 16.6
+finops_gcp_cost_service_usd{service="Cloud Scheduler",service_id="1F14-4801-0E16",slug="Cloud_Scheduler"} 14.89
+finops_gcp_cost_service_usd{service="Cloud DNS",service_id="FA26-5236-B8B5",slug="Cloud_DNS"} 14.6
+finops_gcp_cost_service_usd{service="SendGrid Email API",service_id="2431-6410-693F",slug="SendGrid_Email_API"} 14.13
+finops_gcp_cost_service_usd{service="Certificate Authority Service",service_id="BAE4-9668-BD24",slug="Certificate_Authority_Service"} 12.14
+finops_gcp_cost_service_usd{service="Cloud Pub/Sub",service_id="A1E8-BE35-7EBC",slug="Cloud_Pub_Sub"} 3.9
+finops_gcp_cost_service_usd{service="Workflows",service_id="E722-8436-A7EB",slug="Workflows"} 1.8
+finops_gcp_cost_service_usd{service="BigQuery",service_id="24E6-581D-38E5",slug="BigQuery"} 0.98
+finops_gcp_cost_service_usd{service="Vertex AI",service_id="C7E2-9256-1C43",slug="Vertex_AI"} 0.0
+finops_gcp_cost_service_usd{service="VM Manager",service_id="5E18-9A83-2867",slug="VM_Manager"} 0.0
+# HELP finops_gcp_service_share_ratio Service share of invoice
+# TYPE finops_gcp_service_share_ratio gauge
+finops_gcp_service_share_ratio{service="Cloud Composer"} 0.198969
+finops_gcp_service_share_ratio{service="Cloud Run"} 0.173015
+finops_gcp_service_share_ratio{service="Compute Engine"} 0.158376
+finops_gcp_service_share_ratio{service="Networking"} 0.084296
+finops_gcp_service_share_ratio{service="App Engine"} 0.073656
+finops_gcp_service_share_ratio{service="Cloud Logging"} 0.070482
+finops_gcp_service_share_ratio{service="Cloud SQL"} 0.068271
+finops_gcp_service_share_ratio{service="Cloud Run Functions"} 0.067312
+finops_gcp_service_share_ratio{service="Cloud Tasks"} 0.044230
+finops_gcp_service_share_ratio{service="Cloud Dataflow"} 0.022071
+finops_gcp_service_share_ratio{service="Cloud Monitoring"} 0.007899
+finops_gcp_service_share_ratio{service="Kubernetes Engine"} 0.007819
+finops_gcp_service_share_ratio{service="Cloud Storage"} 0.005680
+finops_gcp_service_share_ratio{service="Artifact Registry"} 0.004315
+finops_gcp_service_share_ratio{service="Secret Manager"} 0.002836
+finops_gcp_service_share_ratio{service="Cloud Build"} 0.002263
+finops_gcp_service_share_ratio{service="Cloud Scheduler"} 0.002030
+finops_gcp_service_share_ratio{service="Cloud DNS"} 0.001990
+finops_gcp_service_share_ratio{service="SendGrid Email API"} 0.001926
+finops_gcp_service_share_ratio{service="Certificate Authority Service"} 0.001655
+finops_gcp_service_share_ratio{service="Cloud Pub/Sub"} 0.000532
+finops_gcp_service_share_ratio{service="Workflows"} 0.000245
+finops_gcp_service_share_ratio{service="BigQuery"} 0.000134
+finops_gcp_service_share_ratio{service="Vertex AI"} 0.000000
+finops_gcp_service_share_ratio{service="VM Manager"} 0.000000
+# HELP finops_gcp_service_mom_change_ratio MoM subtotal change ratio
+# TYPE finops_gcp_service_mom_change_ratio gauge
+# HELP finops_gcp_service_is_new Service first seen this period
+# TYPE finops_gcp_service_is_new gauge
+finops_gcp_service_mom_change_ratio{service="Cloud Composer"} 0.290000
+finops_gcp_service_is_new{service="Cloud Composer"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud Run"} 0.350000
+finops_gcp_service_is_new{service="Cloud Run"} 0
+finops_gcp_service_mom_change_ratio{service="Compute Engine"} 0.430000
+finops_gcp_service_is_new{service="Compute Engine"} 0
+finops_gcp_service_mom_change_ratio{service="Networking"} 0.610000
+finops_gcp_service_is_new{service="Networking"} 0
+finops_gcp_service_mom_change_ratio{service="App Engine"} 0.570000
+finops_gcp_service_is_new{service="App Engine"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud Logging"} 0.420000
+finops_gcp_service_is_new{service="Cloud Logging"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud SQL"} 0.430000
+finops_gcp_service_is_new{service="Cloud SQL"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud Run Functions"} 0.890000
+finops_gcp_service_is_new{service="Cloud Run Functions"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud Tasks"} -0.270000
+finops_gcp_service_is_new{service="Cloud Tasks"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud Dataflow"} 0.210000
+finops_gcp_service_is_new{service="Cloud Dataflow"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud Monitoring"} 0.600000
+finops_gcp_service_is_new{service="Cloud Monitoring"} 0
+finops_gcp_service_is_new{service="Kubernetes Engine"} 1
+finops_gcp_service_mom_change_ratio{service="Cloud Storage"} 0.430000
+finops_gcp_service_is_new{service="Cloud Storage"} 0
+finops_gcp_service_mom_change_ratio{service="Artifact Registry"} 0.320000
+finops_gcp_service_is_new{service="Artifact Registry"} 0
+finops_gcp_service_mom_change_ratio{service="Secret Manager"} 0.320000
+finops_gcp_service_is_new{service="Secret Manager"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud Build"} -0.080000
+finops_gcp_service_is_new{service="Cloud Build"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud Scheduler"} 0.370000
+finops_gcp_service_is_new{service="Cloud Scheduler"} 0
+finops_gcp_service_mom_change_ratio{service="Cloud DNS"} 0.450000
+finops_gcp_service_is_new{service="Cloud DNS"} 0
+finops_gcp_service_mom_change_ratio{service="SendGrid Email API"} 0.030000
+finops_gcp_service_is_new{service="SendGrid Email API"} 0
+finops_gcp_service_is_new{service="Certificate Authority Service"} 1
+finops_gcp_service_mom_change_ratio{service="Cloud Pub/Sub"} 0.010000
+finops_gcp_service_is_new{service="Cloud Pub/Sub"} 0
+finops_gcp_service_mom_change_ratio{service="Workflows"} 1.530000
+finops_gcp_service_is_new{service="Workflows"} 0
+finops_gcp_service_mom_change_ratio{service="BigQuery"} 0.450000
+finops_gcp_service_is_new{service="BigQuery"} 0
+finops_gcp_service_is_new{service="Vertex AI"} 1
+finops_gcp_service_mom_change_ratio{service="VM Manager"} -0.070000
+finops_gcp_service_is_new{service="VM Manager"} 0
+# HELP finops_gcp_recommendation_savings_usd Estimated monthly savings USD
+# TYPE finops_gcp_recommendation_savings_usd gauge
+# HELP finops_action_queue Priority score for action queue
+# TYPE finops_action_queue gauge
+finops_gcp_recommendation_savings_usd{service="Cloud Run Functions",type="growth_anomaly",owner="team-finops"} 87.89
+finops_action_queue{service="Cloud Run Functions",type="growth_anomaly",owner="team-finops"} 86.2
+finops_gcp_recommendation_savings_usd{service="Networking",type="discount_gap",owner="team-cloud-econ"} 76.13
+finops_action_queue{service="Networking",type="discount_gap",owner="team-cloud-econ"} 80
+finops_gcp_recommendation_savings_usd{service="Networking",type="growth_anomaly",owner="team-finops"} 75.44
+finops_action_queue{service="Networking",type="growth_anomaly",owner="team-finops"} 75.2
+finops_gcp_recommendation_savings_usd{service="App Engine",type="growth_anomaly",owner="team-finops"} 61.59
+finops_action_queue{service="App Engine",type="growth_anomaly",owner="team-finops"} 72.4
+finops_gcp_recommendation_savings_usd{service="Secret Manager",type="idle_candidate",owner="team-platform"} 16.64
+finops_action_queue{service="Secret Manager",type="idle_candidate",owner="team-platform"} 48.0
+finops_gcp_recommendation_savings_usd{service="Compute Engine",type="discount_gap",owner="team-cloud-econ"} 17.14
+finops_action_queue{service="Compute Engine",type="discount_gap",owner="team-cloud-econ"} 41.4
+finops_gcp_recommendation_savings_usd{service="Kubernetes Engine",type="new_service_review",owner="team-platform"} 8.6
+finops_action_queue{service="Kubernetes Engine",type="new_service_review",owner="team-platform"} 37.3
+# HELP finops_gcp_alert_flag Demo alert flags (1=active)
+# TYPE finops_gcp_alert_flag gauge
+finops_gcp_alert_flag{alert="spend_spike"} 1
+finops_gcp_alert_flag{alert="service_growth"} 1
+finops_gcp_alert_flag{alert="open_actions"} 1
+finops_gcp_alert_flag{alert="label_compliance_drift"} 0
+# HELP finops_demo_message Section narrative for dashboard text/table panels
+# TYPE finops_demo_message gauge
+finops_demo_message{section="A",title="Executive summary",text="Demo invoice $7,335.08 across 25 services. Top driver: Cloud Composer ($1,459.45, 20% of total). Comparable spend is up 36% vs prior period (~$5,329 → $7,266)."} 1
+finops_demo_message{section="B",title="Spend by service",text="Ranked 25 services by subtotal; focus top 5 for ownership reviews."} 1
+finops_demo_message{section="C",title="Growth & anomalies",text="Fastest riser: Workflows (153%). 3 service(s) marked New."} 1
+finops_demo_message{section="F",title="Waste & opportunities",text="7 heuristic opportunities from MoM growth, new services, and savings pressure."} 1
+finops_demo_message{section="G",title="Action queue",text="7 actions queued; top: Investigate 89% MoM spike on Cloud Run Functions — owner: FinOps"} 1
+finops_demo_message{section="J",title="Alerts & messages",text="Active demo alerts: spend_spike, service_growth, open_actions."} 1
+finops_demo_message{section="meta",title="Disclaimer",text="Synthetic anonymized demo data — not a real customer invoice."} 1
+# HELP finops_opportunity_monthly_usd Addressable demo opportunity USD
+# TYPE finops_opportunity_monthly_usd gauge
+finops_opportunity_monthly_usd 343.43

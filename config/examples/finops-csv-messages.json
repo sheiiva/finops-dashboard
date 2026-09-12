@@ -1,0 +1,39 @@
+{
+  "disclaimer": "Synthetic anonymized demo data \u2014 not a real customer invoice.",
+  "period_label": "Demo window 2025-01-01 \u2192 2025-02-28",
+  "sections": {
+    "A": {
+      "title": "Executive summary",
+      "message": "Demo invoice $7,335.08 across 25 services. Top driver: Cloud Composer ($1,459.45, 20% of total). Comparable spend is up 36% vs prior period (~$5,329 \u2192 $7,266)."
+    },
+    "B": {
+      "title": "Spend by service",
+      "message": "Ranked 25 services by subtotal; focus top 5 for ownership reviews."
+    },
+    "C": {
+      "title": "Growth & anomalies",
+      "message": "Fastest riser: Workflows (153%). 3 service(s) marked New."
+    },
+    "F": {
+      "title": "Waste & opportunities",
+      "message": "7 heuristic opportunities from MoM growth, new services, and savings pressure."
+    },
+    "G": {
+      "title": "Action queue",
+      "message": "7 actions queued; top: Investigate 89% MoM spike on Cloud Run Functions \u2014 owner: FinOps"
+    },
+    "J": {
+      "title": "Alerts & messages",
+      "message": "Active demo alerts: spend_spike, service_growth, open_actions."
+    }
+  },
+  "pack": "v1-slim",
+  "sections_included": [
+    "A",
+    "B",
+    "C",
+    "F",
+    "G",
+    "J"
+  ]
+}
