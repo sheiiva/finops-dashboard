@@ -99,26 +99,29 @@
       </section>
 
       <section class="block evidence" id="evidence" data-reveal>
-        <p class="kicker">How it’s built</p>
-        <h2>Same CSV, ops stack.</h2>
+        <p class="kicker">Under the hood</p>
+        <h2>Built like a delivery, not a slide deck.</h2>
         <p>
-          This Pages showcase is the product front door. The same billing CSV feeds a local
-          Prometheus + Grafana evidence stack for client handoff and screenshots.
+          The demo is driven by a Google Cloud billing CSV: normalized into metrics, opportunity
+          heuristics, and the ranked action queue above. The same snapshot can power a local
+          Prometheus + Grafana stack when you want the ops console view.
         </p>
         <figure class="evidence-figure">
           <img
             src="./assets/grafana-evidence.svg"
-            alt="Local Grafana FinOps evidence dashboard fed by the same CSV snapshot"
+            alt="Grafana view of the same FinOps metrics and action queue"
             width="960"
             height="540"
             loading="lazy"
           />
-          <figcaption>Same CSV, ops stack — local Grafana evidence (not the public landing page).</figcaption>
+          <figcaption>
+            Optional Grafana view of the same data — useful for SRE handoff and deeper panel work.
+          </figcaption>
         </figure>
         <p class="evidence-links">
           <a href="https://github.com/sheiiva/finops-dashboard">Repository</a>
           <a href="https://github.com/sheiiva/finops-dashboard/blob/main/docs/local-dashboard-validation.md"
-            >Local runbook</a
+            >Run the local stack</a
           >
           <a href="https://github.com/sheiiva/finops-dashboard/blob/main/docs/architecture.md"
             >Architecture</a
