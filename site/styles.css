@@ -645,9 +645,17 @@ main {
   white-space: nowrap;
 }
 
-.queue {
-  display: grid;
-  gap: 0.7rem;
+.score-note {
+  margin: -0.5rem 0 1.25rem;
+  max-width: 40rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.score-note strong {
+  color: var(--ink-soft);
+  font-weight: 600;
 }
 
 .queue-item {
