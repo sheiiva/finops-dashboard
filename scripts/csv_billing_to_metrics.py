@@ -257,7 +257,11 @@ def build_messages(
             "C": {"title": "Growth & anomalies", "message": growth_msg},
             "F": {
                 "title": "Waste & opportunities",
-                "message": f"{len(opportunities)} heuristic opportunities from MoM growth, new services, and savings pressure.",
+                "message": (
+                    f"{len(opportunities)} opportunities totaling "
+                    f"${sum(o['est_monthly_savings_usd'] for o in opportunities):,.0f}/mo addressable — "
+                    f"ranked below by estimated recovery, then owned in the action queue."
+                ),
             },
             "G": {"title": "Action queue", "message": action_msg},
             "J": {"title": "Alerts & messages", "message": alert_msg},
