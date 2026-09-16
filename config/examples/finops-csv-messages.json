@@ -14,6 +14,14 @@
       "title": "Growth & anomalies",
       "message": "Fastest riser: Workflows (153%). 3 service(s) marked New."
     },
+    "D": {
+      "title": "Concentration / Pareto",
+      "message": "Top 5 services are 69% of the invoice. 7 services cover 80% of spend \u2014 ownership reviews should start there."
+    },
+    "E": {
+      "title": "Savings & discounts",
+      "message": "List cost $7,745 with $217 in recorded savings/discounts (2.8% of list). Largest lines shown below."
+    },
     "F": {
       "title": "Waste & opportunities",
       "message": "7 opportunities totaling $343/mo addressable \u2014 ranked below by estimated recovery, then owned in the action queue."
@@ -22,18 +30,35 @@
       "title": "Action queue",
       "message": "7 actions queued; top: Investigate 89% MoM spike on Cloud Run Functions \u2014 owner: FinOps"
     },
+    "H": {
+      "title": "Allocation hygiene",
+      "message": "98% of spend has a demo owner tag. 12 services ($157) still need allocation."
+    },
+    "I": {
+      "title": "Forecast & runway",
+      "message": "Next period projects ~$8,935 (+1,600) using a dampened MoM. Recovering $343/mo addressable offsets ~0.2 months of that growth."
+    },
     "J": {
       "title": "Alerts & messages",
       "message": "Active demo alerts: spend_spike, service_growth, open_actions."
+    },
+    "K": {
+      "title": "Governance",
+      "message": "Weekly triage with FinOps + Platform; monthly finance review. Each fix is verified by regenerating the snapshot from a fresh export."
     }
   },
-  "pack": "v1-slim",
+  "pack": "v1.1",
   "sections_included": [
     "A",
     "B",
     "C",
+    "D",
+    "E",
     "F",
     "G",
-    "J"
+    "H",
+    "I",
+    "J",
+    "K"
   ]
 }

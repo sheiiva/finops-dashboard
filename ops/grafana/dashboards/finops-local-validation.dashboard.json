@@ -1,24 +1,24 @@
 {
   "id": null,
   "uid": "finops-local",
-  "title": "FinOps v1 Slim (CSV demo)",
-  "description": "Evidence layer for v1 \u2014 sections A B C F G J. v1.1 adds D E H I K. Pages is the product front door.",
+  "title": "FinOps v1.1 (CSV demo)",
+  "description": "Evidence layer for v1.1 \u2014 sections A\u2013K. Pages is the product front door.",
   "tags": [
     "finops",
     "gcp",
-    "v1-slim",
+    "v1.1",
     "csv-demo"
   ],
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 3,
+  "version": 4,
   "refresh": "30s",
   "editable": true,
   "panels": [
     {
       "id": 100,
       "type": "text",
-      "title": "FinOps v1 slim \u00b7 demo pack",
+      "title": "FinOps v1.1 \u00b7 demo pack",
       "gridPos": {
         "h": 3,
         "w": 24,
@@ -27,7 +27,7 @@
       },
       "options": {
         "mode": "markdown",
-        "content": "**Demo window 2025-01-01 \u2192 2025-02-28**  \nSynthetic anonymized demo data \u2014 not a real customer invoice.  \n\nNarrative: **Spend \u2192 Drivers \u2192 Risks \u2192 Actions \u2192 Alerts**  \nSections: A \u00b7 B \u00b7 C \u00b7 F \u00b7 G \u00b7 J *(D/E/H/I/K deferred to v1.1)*"
+        "content": "**Demo window 2025-01-01 \u2192 2025-02-28**  \nSynthetic anonymized demo data \u2014 not a real customer invoice.  \n\nNarrative: **Spend \u2192 Drivers \u2192 Trend \u2192 Concentration \u2192 Savings \u2192 Opportunities \u2192 Actions \u2192 Allocation \u2192 Forecast \u2192 Alerts \u2192 Governance**  \nSections: A \u00b7 B \u00b7 C \u00b7 D \u00b7 E \u00b7 F \u00b7 G \u00b7 H \u00b7 I \u00b7 J \u00b7 K"
       }
     },
     {
@@ -348,6 +348,111 @@
       ]
     },
     {
+      "id": 110,
+      "type": "text",
+      "title": "D \u00b7 Concentration / Pareto",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Top 5 services are 69% of the invoice. 7 services cover 80% of spend \u2014 ownership reviews should start there."
+      }
+    },
+    {
+      "id": 20,
+      "type": "stat",
+      "title": "Top 5 share",
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 33
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_pareto_top5_share_ratio"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "id": 21,
+      "type": "stat",
+      "title": "Services for 80% spend",
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 33
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_pareto_services_for_80"
+        }
+      ]
+    },
+    {
+      "id": 111,
+      "type": "text",
+      "title": "E \u00b7 Savings & discounts",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "List cost $7,745 with $217 in recorded savings/discounts (2.8% of list). Largest lines shown below."
+      }
+    },
+    {
+      "id": 22,
+      "type": "stat",
+      "title": "Recorded savings (USD)",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_savings_realized_usd"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 2
+        }
+      }
+    },
+    {
       "id": 104,
       "type": "text",
       "title": "F \u00b7 Waste & opportunities (demo heuristics)",
@@ -355,7 +460,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 31
+        "y": 43
       },
       "options": {
         "mode": "markdown",
@@ -370,7 +475,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 33
+        "y": 45
       },
       "datasource": {
         "type": "prometheus",
@@ -402,7 +507,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 33
+        "y": 45
       },
       "datasource": {
         "type": "prometheus",
@@ -424,7 +529,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 41
+        "y": 53
       },
       "options": {
         "mode": "markdown",
@@ -439,7 +544,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 55
       },
       "datasource": {
         "type": "prometheus",
@@ -498,6 +603,90 @@
       ]
     },
     {
+      "id": 112,
+      "type": "text",
+      "title": "H \u00b7 Allocation hygiene",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 64
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "98% of spend has a demo owner tag. 12 services ($157) still need allocation."
+      }
+    },
+    {
+      "id": 23,
+      "type": "stat",
+      "title": "Tagged spend ratio",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 66
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_allocation_compliance_ratio"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 0
+        }
+      }
+    },
+    {
+      "id": 113,
+      "type": "text",
+      "title": "I \u00b7 Forecast & runway",
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 70
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Next period projects ~$8,935 (+1,600) using a dampened MoM. Recovering $343/mo addressable offsets ~0.2 months of that growth."
+      }
+    },
+    {
+      "id": 24,
+      "type": "stat",
+      "title": "Projected next invoice",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 72
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus-local"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "finops_forecast_next_invoice_usd"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyUSD",
+          "decimals": 0
+        }
+      }
+    },
+    {
       "id": 106,
       "type": "text",
       "title": "J \u00b7 Alerts & messages",
@@ -505,7 +694,7 @@
         "h": 2,
         "w": 24,
         "x": 0,
-        "y": 52
+        "y": 76
       },
       "options": {
         "mode": "markdown",
@@ -520,7 +709,7 @@
         "h": 4,
         "w": 6,
         "x": 0,
-        "y": 54
+        "y": 78
       },
       "datasource": {
         "type": "prometheus",
@@ -573,7 +762,7 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 54
+        "y": 78
       },
       "datasource": {
         "type": "prometheus",
@@ -613,7 +802,7 @@
         "h": 4,
         "w": 6,
         "x": 12,
-        "y": 54
+        "y": 78
       },
       "datasource": {
         "type": "prometheus",
@@ -653,7 +842,7 @@
         "h": 4,
         "w": 6,
         "x": 18,
-        "y": 54
+        "y": 78
       },
       "datasource": {
         "type": "prometheus",
@@ -683,6 +872,21 @@
             }
           ]
         }
+      }
+    },
+    {
+      "id": 114,
+      "type": "text",
+      "title": "K \u00b7 Governance",
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 82
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "Weekly triage with FinOps + Platform; monthly finance review. Each fix is verified by regenerating the snapshot from a fresh export."
       }
     }
   ],

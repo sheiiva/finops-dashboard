@@ -6,7 +6,7 @@
     <title>FinOps Dashboard — Google Cloud cost actions</title>
     <meta
       name="description"
-      content="Google Cloud FinOps showcase: spend, trend, ranked opportunities, and an owner action queue."
+      content="Google Cloud FinOps showcase: spend, concentration, savings, opportunities, allocation, forecast, and an owner action queue."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -70,6 +70,22 @@
         </div>
       </section>
 
+      <section class="block" id="concentration" data-reveal>
+        <p class="kicker">Concentration</p>
+        <h2>Who owns most of the bill?</h2>
+        <p class="section-msg" data-msg="D"></p>
+        <div class="metric-strip" id="pareto-strip"></div>
+        <div class="pareto-chart" id="pareto-chart"></div>
+      </section>
+
+      <section class="block" id="savings" data-reveal>
+        <p class="kicker">Savings</p>
+        <h2>What discounts are already working?</h2>
+        <p class="section-msg" data-msg="E"></p>
+        <div class="metric-strip" id="savings-strip"></div>
+        <div class="savings-list" id="savings-list" role="list"></div>
+      </section>
+
       <section class="block" id="opportunities" data-reveal>
         <p class="kicker">Opportunities</p>
         <h2>Where can we recover spend?</h2>
@@ -91,6 +107,22 @@
         <div class="queue" id="action-queue" role="list"></div>
       </section>
 
+      <section class="block" id="allocation" data-reveal>
+        <p class="kicker">Allocation</p>
+        <h2>Is spend tagged to an owner?</h2>
+        <p class="section-msg" data-msg="H"></p>
+        <div class="metric-strip" id="alloc-strip"></div>
+        <div class="gap-list" id="alloc-gaps" role="list"></div>
+      </section>
+
+      <section class="block" id="forecast" data-reveal>
+        <p class="kicker">Forecast</p>
+        <h2>Where is the bill headed?</h2>
+        <p class="section-msg" data-msg="I"></p>
+        <div class="metric-strip" id="forecast-strip"></div>
+        <div class="forecast-compare" id="forecast-compare"></div>
+      </section>
+
       <section class="block" id="alerts" data-reveal>
         <p class="kicker">Alerts</p>
         <h2>What needs attention now?</h2>
@@ -98,13 +130,22 @@
         <div class="alert-row" id="alert-row"></div>
       </section>
 
+      <section class="block" id="governance" data-reveal>
+        <p class="kicker">Governance</p>
+        <h2>How do we run this every week?</h2>
+        <p class="section-msg" data-msg="K"></p>
+        <p class="gov-cadence" id="gov-cadence"></p>
+        <div class="gov-roles" id="gov-roles"></div>
+        <p class="gov-verify" id="gov-verify"></p>
+      </section>
+
       <section class="block evidence" id="evidence" data-reveal>
         <p class="kicker">Under the hood</p>
         <h2>Built like a delivery, not a slide deck.</h2>
         <p>
           The demo is driven by a Google Cloud billing CSV: normalized into metrics, opportunity
-          heuristics, and the ranked action queue above. The same snapshot can power a local
-          Prometheus + Grafana stack when you want the ops console view.
+          heuristics, allocation checks, and the ranked action queue above. The same snapshot can
+          power a local Prometheus + Grafana stack when you want the ops console view.
         </p>
         <figure class="evidence-figure">
           <img
@@ -140,7 +181,7 @@
         <a href="https://github.com/sheiiva/finops-dashboard/blob/main/docs/architecture.md"
           >Architecture</a
         >
-        <span>Demo generated from billing CSV</span>
+        <span>Demo generated from billing CSV · v1.1</span>
       </nav>
     </footer>
 

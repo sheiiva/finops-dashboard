@@ -275,6 +275,204 @@ function renderAlerts(el, alerts) {
     .join("");
 }
 
+function renderPareto(stripEl, chartEl, pareto) {
+  if (!pareto) {
+    stripEl.innerHTML = "";
+    chartEl.innerHTML = "";
+    return;
+  }
+  stripEl.innerHTML = [
+    { label: "Top 5 share", value: `${Math.round((pareto.top5_share || 0) * 100)}%` },
+    { label: "Services to 50%", value: String(pareto.services_for_50_pct) },
+    { label: "Services to 80%", value: String(pareto.services_for_80_pct) },
+  ]
+    .map(
+      (item) => `
+      <div class="metric">
+        <span class="label">${item.label}</span>
+        <span class="value">${item.value}</span>
+      </div>`
+    )
+    .join("");
+
+  chartEl.innerHTML = (pareto.rows || [])
+    .map((r) => {
+      const shareW = Math.max(4, (r.share || 0) * 100);
+      const cumW = Math.max(4, (r.cumulative_share || 0) * 100);
+      const sid = r.service_id ? `<span class="sid">${r.service_id}</span>` : "";
+      return `
+        <div class="pareto-row">
+          <span class="pareto-rank">${r.rank}</span>
+          <span class="name">${r.name}${sid}</span>
+          <div class="pareto-tracks">
+            <div class="pareto-track"><div class="pareto-fill share" style="--w:${shareW}%"></div></div>
+            <div class="pareto-track"><div class="pareto-fill cum" style="--w:${cumW}%"></div></div>
+          </div>
+          <span class="amt">${moneyExact(r.subtotal_usd)}</span>
+          <span class="pareto-cum">${Math.round((r.cumulative_share || 0) * 100)}%</span>
+        </div>`;
+    })
+    .join("");
+}
+
+function renderSavings(stripEl, listEl, savings) {
+  if (!savings) {
+    stripEl.innerHTML = "";
+    listEl.innerHTML = "";
+    return;
+  }
+  const realized = savings.realized_savings_usd || 0;
+  stripEl.innerHTML = [
+    { label: "List cost", value: money(savings.list_cost_usd) },
+    {
+      label: "Recorded savings",
+      value: moneyExact(realized),
+      tone: realized < 0 ? "mom down" : "",
+    },
+    {
+      label: "Coverage of list",
+      value: `${Math.round((savings.coverage_ratio || 0) * 1000) / 10}%`,
+    },
+  ]
+    .map(
+      (item) => `
+      <div class="metric">
+        <span class="label">${item.label}</span>
+        <span class="value ${item.tone || ""}">${item.value}</span>
+      </div>`
+    )
+    .join("");
+
+  if (!(savings.lines || []).length) {
+    listEl.innerHTML = `<p class="trend-empty">No discount lines above the demo threshold.</p>`;
+    return;
+  }
+  listEl.innerHTML = savings.lines
+    .map((line) => {
+      const sid = line.service_id ? ` · ${line.service_id}` : "";
+      return `
+      <article class="savings-item" role="listitem">
+        <div>
+          <h3>${line.name}</h3>
+          <p>Other / negotiated / programs${sid}</p>
+        </div>
+        <div class="savings-amt">${moneyExact(line.total_savings_usd)}</div>
+      </article>`;
+    })
+    .join("");
+}
+
+function renderAllocation(stripEl, gapsEl, allocation) {
+  if (!allocation) {
+    stripEl.innerHTML = "";
+    gapsEl.innerHTML = "";
+    return;
+  }
+  stripEl.innerHTML = [
+    {
+      label: "Tagged spend",
+      value: `${Math.round((allocation.compliance_ratio || 0) * 100)}%`,
+    },
+    { label: "Unowned spend", value: money(allocation.unowned_spend_usd) },
+    { label: "Gaps", value: String(allocation.unowned_service_count) },
+  ]
+    .map(
+      (item) => `
+      <div class="metric">
+        <span class="label">${item.label}</span>
+        <span class="value">${item.value}</span>
+      </div>`
+    )
+    .join("");
+
+  gapsEl.innerHTML = (allocation.gaps || [])
+    .map((g) => {
+      const sid = g.service_id ? `<span class="sid">${g.service_id}</span>` : "";
+      return `
+      <article class="gap-item" role="listitem">
+        <div>
+          <h3>${g.name}${sid}</h3>
+          <p>Needs an owner tag</p>
+        </div>
+        <div class="gap-amt">${moneyExact(g.subtotal_usd)}</div>
+      </article>`;
+    })
+    .join("");
+}
+
+function renderForecast(stripEl, compareEl, forecast, currentInvoice) {
+  if (!forecast) {
+    stripEl.innerHTML = "";
+    compareEl.innerHTML = "";
+    return;
+  }
+  stripEl.innerHTML = [
+    { label: "Projected next", value: money(forecast.next_invoice_usd) },
+    {
+      label: "Projected delta",
+      value: moneyExact(forecast.projected_delta_usd),
+      tone: momClass(
+        forecast.projected_delta_usd > 0 ? 0.1 : forecast.projected_delta_usd < 0 ? -0.1 : 0,
+        false
+      ),
+    },
+    {
+      label: "Runway if recovered",
+      value: `${forecast.runway_months_if_recovered} mo`,
+    },
+  ]
+    .map(
+      (item) => `
+      <div class="metric">
+        <span class="label">${item.label}</span>
+        <span class="value ${item.tone || ""}">${item.value}</span>
+      </div>`
+    )
+    .join("");
+
+  const current = currentInvoice || 0;
+  const next = forecast.next_invoice_usd || 0;
+  const recovered = forecast.next_invoice_if_recovered_usd || 0;
+  const max = Math.max(current, next, recovered, 1);
+  compareEl.innerHTML = `
+    <div class="compare-bars">
+      <div class="compare-row">
+        <span class="compare-label">Current</span>
+        <div class="compare-track"><div class="compare-fill prior" style="--w:${(current / max) * 100}%"></div></div>
+        <span class="compare-amt">${moneyExact(current)}</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-label">Next</span>
+        <div class="compare-track"><div class="compare-fill now" style="--w:${(next / max) * 100}%"></div></div>
+        <span class="compare-amt">${moneyExact(next)}</span>
+      </div>
+      <div class="compare-row">
+        <span class="compare-label">If fixed</span>
+        <div class="compare-track"><div class="compare-fill save" style="--w:${(recovered / max) * 100}%"></div></div>
+        <span class="compare-amt">${moneyExact(recovered)}</span>
+      </div>
+    </div>
+    <p class="compare-note">
+      Projection uses a dampened MoM (${pct(forecast.assumption_mom_ratio)}).
+      “If fixed” subtracts addressable opportunity from the next invoice.
+    </p>`;
+}
+
+function renderGovernance(gov) {
+  if (!gov) return;
+  document.getElementById("gov-cadence").textContent = gov.cadence || "";
+  document.getElementById("gov-roles").innerHTML = (gov.roles || [])
+    .map(
+      (r) => `
+      <div class="gov-role">
+        <strong>${r.role}</strong>
+        <span>${r.owns}</span>
+      </div>`
+    )
+    .join("");
+  document.getElementById("gov-verify").textContent = gov.verify || "";
+}
+
 function wireMessages(messages) {
   document.querySelectorAll("[data-msg]").forEach((node) => {
     const key = node.getAttribute("data-msg");
@@ -320,6 +518,16 @@ async function main() {
     data.fallers || [],
     "No fallers in this snapshot."
   );
+  renderPareto(
+    document.getElementById("pareto-strip"),
+    document.getElementById("pareto-chart"),
+    data.pareto
+  );
+  renderSavings(
+    document.getElementById("savings-strip"),
+    document.getElementById("savings-list"),
+    data.savings
+  );
   document.getElementById("opportunity-total").textContent = `${money(
     data.opportunity_total_usd
   )} addressable this period`;
@@ -330,9 +538,21 @@ async function main() {
     data.opportunity_total_usd
   );
   renderQueue(document.getElementById("action-queue"), data.actions || []);
+  renderAllocation(
+    document.getElementById("alloc-strip"),
+    document.getElementById("alloc-gaps"),
+    data.allocation
+  );
+  renderForecast(
+    document.getElementById("forecast-strip"),
+    document.getElementById("forecast-compare"),
+    data.forecast,
+    data.invoice_total_usd
+  );
   renderAlerts(document.getElementById("alert-row"), data.alerts || {});
+  renderGovernance(data.governance);
   document.getElementById("disclaimer").textContent =
-    `${data.period_label || ""} · ${data.disclaimer || ""}`.trim();
+    `${data.period_label || ""} · ${data.disclaimer || ""} · ${data.version || ""}`.trim();
 
   revealOnScroll();
 }

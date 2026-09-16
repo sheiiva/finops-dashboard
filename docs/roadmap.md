@@ -95,7 +95,7 @@ Outcome:
 | Version | What ships | Data source | Tracking |
 |---|---|---|---|
 | **v1** | **Product wow showcase** on GitHub Pages (hero + one-scroll FinOps story). Grafana slim pack as **evidence** only. Real Google Cloud service names; synthetic USD. | Manually exported / anonymized **CSV** | #82, #86 |
-| **v1.1** | Deeper sections (Pareto, savings lines, allocation, forecast) + optional region/project when export supports it | Same CSV path or richer export | #89 |
+| **v1.1** | Deeper sections (Pareto, savings lines, allocation, forecast, governance) on Pages + evidence | Same CSV path | #89 |
 | **v2** | **Live Google Cloud API** — connect account, pull/stream costs | Provider APIs (GCP) | #88 |
 | **v3** | AWS / Azure adapters | Multi-cloud | later |
 
@@ -108,6 +108,15 @@ Outcome:
 - [x] Evidence media + “See how it’s built” CTA
 - [x] Footer rail: Repo · Runbook · Architecture · CSV demo note
 - [x] README aligned to Google-first CSV showcase
-- [ ] Live Pages deploy matches local showcase
+- [x] Live Pages deploy matches local showcase
+
+### v1.1 acceptance
+
+- [x] **D** Concentration / Pareto (top-N share, cumulative curve)
+- [x] **E** Savings & discounts from CSV columns
+- [x] **H** Allocation hygiene (demo owner tags + gaps)
+- [x] **I** Forecast & runway projection
+- [x] **K** Governance cadence / RACI snippet
+- [x] Grafana evidence pack covers A–K
 
 CSV remains the offline/demo fallback after v2 so the public showcase never requires live credentials.
