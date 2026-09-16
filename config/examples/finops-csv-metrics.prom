@@ -1,6 +1,6 @@
 # HELP finops_demo_info Synthetic FinOps demo metrics from billing CSV
 # TYPE finops_demo_info gauge
-finops_demo_info{pack="v1-slim",source="gcp-billing-services.sample.csv"} 1
+finops_demo_info{pack="v1.1",source="gcp-billing-services.sample.csv"} 1
 # HELP finops_gcp_cost_total_usd Invoice total USD
 # TYPE finops_gcp_cost_total_usd gauge
 finops_gcp_cost_total_usd 7335.08
@@ -136,14 +136,34 @@ finops_gcp_alert_flag{alert="spend_spike"} 1
 finops_gcp_alert_flag{alert="service_growth"} 1
 finops_gcp_alert_flag{alert="open_actions"} 1
 finops_gcp_alert_flag{alert="label_compliance_drift"} 0
+# HELP finops_pareto_top5_share_ratio Top 5 services share of invoice
+# TYPE finops_pareto_top5_share_ratio gauge
+finops_pareto_top5_share_ratio 0.6884
+# HELP finops_pareto_services_for_80 Count of services covering 80% spend
+# TYPE finops_pareto_services_for_80 gauge
+finops_pareto_services_for_80 7
+# HELP finops_savings_realized_usd Recorded discounts/savings USD (negative = credit)
+# TYPE finops_savings_realized_usd gauge
+finops_savings_realized_usd -217.4
+# HELP finops_allocation_compliance_ratio Demo tagged spend ratio
+# TYPE finops_allocation_compliance_ratio gauge
+finops_allocation_compliance_ratio 0.9786
+# HELP finops_forecast_next_invoice_usd Projected next invoice USD
+# TYPE finops_forecast_next_invoice_usd gauge
+finops_forecast_next_invoice_usd 8934.86
 # HELP finops_demo_message Section narrative for dashboard text/table panels
 # TYPE finops_demo_message gauge
 finops_demo_message{section="A",title="Executive summary",text="Demo invoice $7,335.08 across 25 services. Top driver: Cloud Composer ($1,459.45, 20% of total). Comparable spend is up 36% vs prior period (~$5,329 → $7,266)."} 1
 finops_demo_message{section="B",title="Spend by service",text="Ranked 25 services by subtotal; focus top 5 for ownership reviews."} 1
 finops_demo_message{section="C",title="Growth & anomalies",text="Fastest riser: Workflows (153%). 3 service(s) marked New."} 1
-finops_demo_message{section="F",title="Waste & opportunities",text="7 heuristic opportunities from MoM growth, new services, and savings pressure."} 1
+finops_demo_message{section="D",title="Concentration / Pareto",text="Top 5 services are 69% of the invoice. 7 services cover 80% of spend — ownership reviews should start there."} 1
+finops_demo_message{section="E",title="Savings & discounts",text="List cost $7,745 with $217 in recorded savings/discounts (2.8% of list). Largest lines shown below."} 1
+finops_demo_message{section="F",title="Waste & opportunities",text="7 opportunities totaling $343/mo addressable — ranked below by estimated recovery, then owned in the action queue."} 1
 finops_demo_message{section="G",title="Action queue",text="7 actions queued; top: Investigate 89% MoM spike on Cloud Run Functions — owner: FinOps"} 1
+finops_demo_message{section="H",title="Allocation hygiene",text="98% of spend has a demo owner tag. 12 services ($157) still need allocation."} 1
+finops_demo_message{section="I",title="Forecast & runway",text="Next period projects ~$8,935 (+1,600) using a dampened MoM. Recovering $343/mo addressable offsets ~0.2 months of that growth."} 1
 finops_demo_message{section="J",title="Alerts & messages",text="Active demo alerts: spend_spike, service_growth, open_actions."} 1
+finops_demo_message{section="K",title="Governance",text="Weekly triage with FinOps + Platform; monthly finance review. Each fix is verified by regenerating the snapshot from a fresh export."} 1
 finops_demo_message{section="meta",title="Disclaimer",text="Synthetic anonymized demo data — not a real customer invoice."} 1
 # HELP finops_opportunity_monthly_usd Addressable demo opportunity USD
 # TYPE finops_opportunity_monthly_usd gauge

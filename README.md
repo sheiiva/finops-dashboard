@@ -6,11 +6,11 @@
 
 Native cloud consoles explain **where money is spent**. This project adds the execution layer: prioritized actions, explicit ownership, estimated savings, and a clear path to verify outcomes.
 
-## What v1 demonstrates (portfolio showcase)
+## What v1.1 demonstrates (portfolio showcase)
 
 **Google Cloud–first** CSV demo — not a live billing login.
 
-1. Public product UI (GitHub Pages): spend → trend → opportunities → owner action queue  
+1. Public product UI (GitHub Pages): spend → drivers → trend → concentration → savings → opportunities → action queue → allocation → forecast → alerts → governance  
 2. Same CSV feeds a local Prometheus + Grafana **evidence** stack for screenshots / client handoff  
 3. Synthetic costs with **real Google Cloud service names and public service IDs**
 
@@ -27,8 +27,8 @@ See `docs/local-dashboard-validation.md`.
 
 | Version | Scope |
 |---|---|
-| **v1** | Pages wow showcase + CSV pipeline + Grafana evidence (this release bar) |
-| **v1.1** | Deeper sections (Pareto, savings lines, allocation, forecast) |
+| **v1** | Pages wow showcase + CSV pipeline + Grafana evidence |
+| **v1.1** | Deeper sections (Pareto, savings, allocation, forecast, governance) — current |
 | **v2** | Live Google Cloud API / billing export streaming |
 | **v3** | AWS / Azure adapters (later) |
 

@@ -1,9 +1,9 @@
 # Local Dashboard Validation (Docker Compose)
 
-**v1 front door:** GitHub Pages product showcase (wow narrative) — see issue #86 / live site.  
+**v1.1 front door:** GitHub Pages product showcase (wow narrative) — live site.  
 **This doc:** optional **Grafana evidence** stack for screenshots/GIF and local validation.
 
-v1 slim evidence sections: **A · B · C · F · G · J** (D/E/H/I/K → **v1.1**).
+Evidence sections: **A · B · C · D · E · F · G · H · I · J · K**.
 
 **Data path today:** manually filled / anonymized CSV (not live cloud).  
 **v2 (later):** connect a cloud account and stream costs via provider APIs (#88).

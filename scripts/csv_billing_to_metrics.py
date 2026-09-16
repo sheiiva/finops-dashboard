@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Convert anonymized billing CSV into Prometheus metrics + demo messages (v1 slim)."""
+"""Convert anonymized billing CSV into Prometheus metrics + demo messages (v1.1)."""
 
 from __future__ import annotations
 
@@ -16,6 +16,8 @@ class ServiceRow:
     name: str
     service_id: str
     list_cost: float
+    negotiated_savings: float
+    savings_programs: float
     other_savings: float
     subtotal: float
     mom_raw: str
@@ -68,6 +70,8 @@ def load_services(csv_path: Path) -> tuple[list[ServiceRow], float]:
                     name=label,
                     service_id=(raw.get("Service ID") or "").strip(),
                     list_cost=_parse_money(raw.get("List cost (USD)") or "0"),
+                    negotiated_savings=_parse_money(raw.get("Negotiated savings (USD)") or "0"),
+                    savings_programs=_parse_money(raw.get("Savings programs (USD)") or "0"),
                     other_savings=_parse_money(raw.get("Other savings (USD)") or "0"),
                     subtotal=_parse_money(raw.get("Subtotal (USD)") or "0"),
                     mom_raw=(raw.get("Percent change in subtotal compared to previous period") or "").strip(),
@@ -183,14 +187,201 @@ def build_opportunities(services: list[ServiceRow], invoice_total: float) -> lis
     return opportunities[:8]
 
 
-def build_alerts(services: list[ServiceRow], opportunities: list[dict]) -> dict[str, int]:
+def build_alerts(
+    services: list[ServiceRow],
+    opportunities: list[dict],
+    allocation: dict | None = None,
+) -> dict[str, int]:
     high_growth = any(s.mom_ratio is not None and s.mom_ratio >= 0.5 and s.subtotal >= 100 for s in services)
+    label_drift = 0
+    if allocation and allocation.get("compliance_ratio", 1.0) < 0.85:
+        label_drift = 1
     return {
         "spend_spike": 1 if high_growth else 0,
         "service_growth": 1 if high_growth else 0,
         "open_actions": 1 if opportunities else 0,
-        "label_compliance_drift": 0,
+        "label_compliance_drift": label_drift,
     }
+
+
+def build_pareto(services: list[ServiceRow], invoice_total: float) -> dict:
+    """D — concentration / Pareto from service subtotals."""
+    cumulative = 0.0
+    rows: list[dict] = []
+    services_for_50 = None
+    services_for_80 = None
+    for idx, svc in enumerate(services, start=1):
+        share = (svc.subtotal / invoice_total) if invoice_total else 0.0
+        cumulative += share
+        rows.append(
+            {
+                "rank": idx,
+                "name": svc.name,
+                "service_id": svc.service_id,
+                "subtotal_usd": svc.subtotal,
+                "share": round(share, 4),
+                "cumulative_share": round(cumulative, 4),
+            }
+        )
+        if services_for_50 is None and cumulative >= 0.5:
+            services_for_50 = idx
+        if services_for_80 is None and cumulative >= 0.8:
+            services_for_80 = idx
+
+    top5_share = round(sum(r["share"] for r in rows[:5]), 4)
+    return {
+        "top5_share": top5_share,
+        "services_for_50_pct": services_for_50 or len(services),
+        "services_for_80_pct": services_for_80 or len(services),
+        "rows": rows[:10],
+    }
+
+
+def build_savings(services: list[ServiceRow]) -> dict:
+    """E — discount / savings program lines from CSV columns."""
+    negotiated = round(sum(s.negotiated_savings for s in services), 2)
+    programs = round(sum(s.savings_programs for s in services), 2)
+    other = round(sum(s.other_savings for s in services), 2)
+    list_total = round(sum(s.list_cost for s in services), 2)
+    realized = round(abs(negotiated) + abs(programs) + abs(other), 2)
+    lines = []
+    for svc in services:
+        line_total = abs(svc.negotiated_savings) + abs(svc.savings_programs) + abs(svc.other_savings)
+        if line_total < 1:
+            continue
+        lines.append(
+            {
+                "name": svc.name,
+                "service_id": svc.service_id,
+                "negotiated_usd": svc.negotiated_savings,
+                "programs_usd": svc.savings_programs,
+                "other_usd": svc.other_savings,
+                "total_savings_usd": round(
+                    svc.negotiated_savings + svc.savings_programs + svc.other_savings, 2
+                ),
+            }
+        )
+    lines.sort(key=lambda r: abs(r["total_savings_usd"]), reverse=True)
+    coverage = round(realized / list_total, 4) if list_total else 0.0
+    return {
+        "list_cost_usd": list_total,
+        "negotiated_usd": negotiated,
+        "programs_usd": programs,
+        "other_usd": other,
+        "realized_savings_usd": round(negotiated + programs + other, 2),
+        "coverage_ratio": coverage,
+        "lines": lines[:6],
+    }
+
+
+def build_allocation(services: list[ServiceRow], invoice_total: float) -> dict:
+    """H — demo allocation hygiene (CSV has no tags; heuristics stand in)."""
+    # Demo ownership map: large spend → Platform/FinOps; new/long-tail → unowned.
+    owned_rows: list[dict] = []
+    unowned_rows: list[dict] = []
+    for svc in services:
+        if svc.is_new or svc.subtotal < 25:
+            owner = None
+            status = "unowned"
+            unowned_rows.append(
+                {
+                    "name": svc.name,
+                    "service_id": svc.service_id,
+                    "subtotal_usd": svc.subtotal,
+                    "status": status,
+                    "owner_label": None,
+                }
+            )
+        elif svc.subtotal >= 500:
+            owner = "Platform"
+            owned_rows.append(
+                {
+                    "name": svc.name,
+                    "service_id": svc.service_id,
+                    "subtotal_usd": svc.subtotal,
+                    "status": "tagged",
+                    "owner_label": owner,
+                }
+            )
+        else:
+            owner = "FinOps"
+            owned_rows.append(
+                {
+                    "name": svc.name,
+                    "service_id": svc.service_id,
+                    "subtotal_usd": svc.subtotal,
+                    "status": "tagged",
+                    "owner_label": owner,
+                }
+            )
+
+    unowned_spend = round(sum(r["subtotal_usd"] for r in unowned_rows), 2)
+    owned_spend = round(invoice_total - unowned_spend, 2) if invoice_total else 0.0
+    compliance = round(owned_spend / invoice_total, 4) if invoice_total else 1.0
+    return {
+        "compliance_ratio": compliance,
+        "owned_spend_usd": owned_spend,
+        "unowned_spend_usd": unowned_spend,
+        "unowned_service_count": len(unowned_rows),
+        "tagged_service_count": len(owned_rows),
+        "gaps": sorted(unowned_rows, key=lambda r: r["subtotal_usd"], reverse=True)[:6],
+    }
+
+
+def build_forecast(
+    invoice_total: float,
+    invoice_mom_ratio: float | None,
+    opportunity_total: float,
+) -> dict:
+    """I — simple runway / next-period projection from MoM."""
+    mom = invoice_mom_ratio if invoice_mom_ratio is not None else 0.0
+    # Dampen extreme MoM for a demo projection.
+    dampened = max(-0.25, min(0.35, mom * 0.6))
+    next_invoice = round(invoice_total * (1.0 + dampened), 2)
+    delta = round(next_invoice - invoice_total, 2)
+    # Months of growth offset if addressable savings are realized next period.
+    if delta > 0 and opportunity_total > 0:
+        runway_months = round(opportunity_total / delta, 1)
+    elif opportunity_total > 0:
+        runway_months = 12.0
+    else:
+        runway_months = 0.0
+    recovered = round(max(0.0, next_invoice - opportunity_total), 2)
+    return {
+        "next_invoice_usd": next_invoice,
+        "projected_delta_usd": delta,
+        "assumption_mom_ratio": round(dampened, 4),
+        "runway_months_if_recovered": min(runway_months, 24.0),
+        "next_invoice_if_recovered_usd": recovered,
+    }
+
+
+def build_governance() -> dict:
+    """K — engagement-kit cadence / RACI snippet."""
+    return {
+        "cadence": "Weekly 30-min FinOps triage · monthly exec spend review",
+        "roles": [
+            {"role": "FinOps", "owns": "Prioritize queue, validate savings estimates"},
+            {"role": "Platform", "owns": "Remediate idle / new-service ownership"},
+            {"role": "Cloud Economics", "owns": "Discount / CUD coverage reviews"},
+            {"role": "Finance", "owns": "Invoice sign-off and forecast check"},
+        ],
+        "verify": "After each action: re-export CSV → regenerate snapshot → confirm MoM and opportunity delta.",
+    }
+
+
+def _invoice_mom(services: list[ServiceRow]) -> tuple[float, float, float | None]:
+    prior_total = 0.0
+    comparable_current = 0.0
+    for svc in services:
+        if svc.is_new or svc.mom_ratio is None or svc.mom_ratio <= -0.999:
+            continue
+        prior_total += svc.subtotal / (1.0 + svc.mom_ratio)
+        comparable_current += svc.subtotal
+    ratio = None
+    if prior_total > 0:
+        ratio = round((comparable_current - prior_total) / prior_total, 4)
+    return prior_total, comparable_current, ratio
 
 
 def build_messages(
@@ -198,6 +389,10 @@ def build_messages(
     invoice_total: float,
     opportunities: list[dict],
     alerts: dict[str, int],
+    pareto: dict,
+    savings: dict,
+    allocation: dict,
+    forecast: dict,
 ) -> dict:
     top = services[0] if services else None
     top_share = (top.subtotal / invoice_total) if top and invoice_total else 0.0
@@ -212,16 +407,8 @@ def build_messages(
         if top
         else f"Demo invoice ${invoice_total:,.2f}."
     )
-    # Prior-period estimate from MoM ratios (services with measurable change).
-    prior_est = 0.0
-    comparable = 0.0
-    for svc in services:
-        if svc.mom_ratio is None or svc.is_new or svc.mom_ratio <= -0.999:
-            continue
-        prior_est += svc.subtotal / (1.0 + svc.mom_ratio)
-        comparable += svc.subtotal
-    if prior_est > 0:
-        mom_invoice = (comparable - prior_est) / prior_est
+    prior_est, comparable, mom_invoice = _invoice_mom(services)
+    if prior_est > 0 and mom_invoice is not None:
         direction = "up" if mom_invoice >= 0 else "down"
         headline += (
             f" Comparable spend is {direction} {abs(mom_invoice):.0%} vs prior period "
@@ -244,6 +431,35 @@ def build_messages(
         if alert_on
         else "No demo alerts active."
     )
+    pareto_msg = (
+        f"Top 5 services are {pareto['top5_share']:.0%} of the invoice. "
+        f"{pareto['services_for_80_pct']} services cover 80% of spend — "
+        f"ownership reviews should start there."
+    )
+    realized = savings["realized_savings_usd"]
+    savings_msg = (
+        f"List cost ${savings['list_cost_usd']:,.0f} with "
+        f"${abs(realized):,.0f} in recorded savings/discounts "
+        f"({savings['coverage_ratio']:.1%} of list). "
+        f"Largest lines shown below."
+        if realized
+        else f"List cost ${savings['list_cost_usd']:,.0f}; little discount coverage in this demo export."
+    )
+    alloc_msg = (
+        f"{allocation['compliance_ratio']:.0%} of spend has a demo owner tag. "
+        f"{allocation['unowned_service_count']} services "
+        f"(${allocation['unowned_spend_usd']:,.0f}) still need allocation."
+    )
+    forecast_msg = (
+        f"Next period projects ~${forecast['next_invoice_usd']:,.0f} "
+        f"({forecast['projected_delta_usd']:+,.0f}) using a dampened MoM. "
+        f"Recovering ${sum(o['est_monthly_savings_usd'] for o in opportunities):,.0f}/mo "
+        f"addressable offsets ~{forecast['runway_months_if_recovered']:.1f} months of that growth."
+    )
+    gov_msg = (
+        "Weekly triage with FinOps + Platform; monthly finance review. "
+        "Each fix is verified by regenerating the snapshot from a fresh export."
+    )
 
     return {
         "disclaimer": "Synthetic anonymized demo data — not a real customer invoice.",
@@ -255,6 +471,8 @@ def build_messages(
                 "message": f"Ranked {len(services)} services by subtotal; focus top 5 for ownership reviews.",
             },
             "C": {"title": "Growth & anomalies", "message": growth_msg},
+            "D": {"title": "Concentration / Pareto", "message": pareto_msg},
+            "E": {"title": "Savings & discounts", "message": savings_msg},
             "F": {
                 "title": "Waste & opportunities",
                 "message": (
@@ -264,10 +482,13 @@ def build_messages(
                 ),
             },
             "G": {"title": "Action queue", "message": action_msg},
+            "H": {"title": "Allocation hygiene", "message": alloc_msg},
+            "I": {"title": "Forecast & runway", "message": forecast_msg},
             "J": {"title": "Alerts & messages", "message": alert_msg},
+            "K": {"title": "Governance", "message": gov_msg},
         },
-        "pack": "v1-slim",
-        "sections_included": ["A", "B", "C", "F", "G", "J"],
+        "pack": "v1.1",
+        "sections_included": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"],
     }
 
 
@@ -277,11 +498,15 @@ def render_prom(
     opportunities: list[dict],
     alerts: dict[str, int],
     messages: dict,
+    pareto: dict,
+    savings: dict,
+    allocation: dict,
+    forecast: dict,
 ) -> str:
     lines: list[str] = [
         "# HELP finops_demo_info Synthetic FinOps demo metrics from billing CSV",
         "# TYPE finops_demo_info gauge",
-        'finops_demo_info{pack="v1-slim",source="gcp-billing-services.sample.csv"} 1',
+        'finops_demo_info{pack="v1.1",source="gcp-billing-services.sample.csv"} 1',
         "# HELP finops_gcp_cost_total_usd Invoice total USD",
         "# TYPE finops_gcp_cost_total_usd gauge",
         f"finops_gcp_cost_total_usd {invoice_total}",
@@ -346,7 +571,24 @@ def render_prom(
     for name, value in alerts.items():
         lines.append(f'finops_gcp_alert_flag{{alert="{name}"}} {value}')
 
-    # Message metrics for Grafana table panels (label carries text).
+    lines += [
+        "# HELP finops_pareto_top5_share_ratio Top 5 services share of invoice",
+        "# TYPE finops_pareto_top5_share_ratio gauge",
+        f"finops_pareto_top5_share_ratio {pareto['top5_share']}",
+        "# HELP finops_pareto_services_for_80 Count of services covering 80% spend",
+        "# TYPE finops_pareto_services_for_80 gauge",
+        f"finops_pareto_services_for_80 {pareto['services_for_80_pct']}",
+        "# HELP finops_savings_realized_usd Recorded discounts/savings USD (negative = credit)",
+        "# TYPE finops_savings_realized_usd gauge",
+        f"finops_savings_realized_usd {savings['realized_savings_usd']}",
+        "# HELP finops_allocation_compliance_ratio Demo tagged spend ratio",
+        "# TYPE finops_allocation_compliance_ratio gauge",
+        f"finops_allocation_compliance_ratio {allocation['compliance_ratio']}",
+        "# HELP finops_forecast_next_invoice_usd Projected next invoice USD",
+        "# TYPE finops_forecast_next_invoice_usd gauge",
+        f"finops_forecast_next_invoice_usd {forecast['next_invoice_usd']}",
+    ]
+
     lines += [
         "# HELP finops_demo_message Section narrative for dashboard text/table panels",
         "# TYPE finops_demo_message gauge",
@@ -375,6 +617,11 @@ def build_site_snapshot(
     opportunities: list[dict],
     alerts: dict[str, int],
     messages: dict,
+    pareto: dict,
+    savings: dict,
+    allocation: dict,
+    forecast: dict,
+    governance: dict,
 ) -> dict:
     """Structured payload for the GitHub Pages product showcase."""
     top = services[0] if services else None
@@ -441,8 +688,8 @@ def build_site_snapshot(
     return {
         "product": "FinOps Dashboard",
         "cloud": "Google Cloud",
-        "version": "v1",
-        "pack": messages.get("pack", "v1-slim"),
+        "version": "v1.1",
+        "pack": messages.get("pack", "v1.1"),
         "period_label": messages["period_label"],
         "disclaimer": messages["disclaimer"],
         "invoice_total_usd": invoice_total,
@@ -462,6 +709,11 @@ def build_site_snapshot(
         "top_services": top_services,
         "risers": [_trend_row(s) for s in risers],
         "fallers": [_trend_row(s) for s in fallers],
+        "pareto": pareto,
+        "savings": savings,
+        "allocation": allocation,
+        "forecast": forecast,
+        "governance": governance,
         "actions": opportunities,
         "alerts": alerts,
         "sections_included": messages.get("sections_included", []),
@@ -469,7 +721,7 @@ def build_site_snapshot(
 
 
 def build_dashboard(messages: dict) -> dict:
-    """Grafana dashboard for v1 slim sections A B C F G J."""
+    """Grafana dashboard for v1.1 sections A–K."""
     ds = {"type": "prometheus", "uid": "prometheus-local"}
 
     def text_panel(panel_id: int, title: str, body: str, x: int, y: int, w: int = 24, h: int = 3) -> dict:
@@ -487,23 +739,27 @@ def build_dashboard(messages: dict) -> dict:
     a = messages["sections"]["A"]["message"]
     b = messages["sections"]["B"]["message"]
     c = messages["sections"]["C"]["message"]
+    d = messages["sections"]["D"]["message"]
+    e = messages["sections"]["E"]["message"]
     f = messages["sections"]["F"]["message"]
     g = messages["sections"]["G"]["message"]
+    h = messages["sections"]["H"]["message"]
+    i = messages["sections"]["I"]["message"]
     j = messages["sections"]["J"]["message"]
+    k = messages["sections"]["K"]["message"]
     disclaimer = messages["disclaimer"]
     period = messages["period_label"]
 
     panels: list[dict] = [
         text_panel(
             100,
-            "FinOps v1 slim · demo pack",
-            f"**{period}**  \n{disclaimer}  \n\nNarrative: **Spend → Drivers → Risks → Actions → Alerts**  \nSections: A · B · C · F · G · J *(D/E/H/I/K deferred to v1.1)*",
+            "FinOps v1.1 · demo pack",
+            f"**{period}**  \n{disclaimer}  \n\nNarrative: **Spend → Drivers → Trend → Concentration → Savings → Opportunities → Actions → Allocation → Forecast → Alerts → Governance**  \nSections: A · B · C · D · E · F · G · H · I · J · K",
             0,
             0,
             24,
             3,
         ),
-        # A
         text_panel(101, "A · Executive summary", a, 0, 3, 24, 2),
         {
             "id": 1,
@@ -540,7 +796,6 @@ def build_dashboard(messages: dict) -> dict:
             "targets": [{"refId": "A", "expr": "topk(1, finops_gcp_service_share_ratio)"}],
             "fieldConfig": {"defaults": {"unit": "percentunit", "decimals": 1}},
         },
-        # B
         text_panel(102, "B · Spend by service", b, 0, 9, 24, 2),
         {
             "id": 5,
@@ -592,7 +847,6 @@ def build_dashboard(messages: dict) -> dict:
                 ],
             },
         },
-        # C
         text_panel(103, "C · Growth & anomalies", c, 0, 21, 24, 2),
         {
             "id": 7,
@@ -619,7 +873,7 @@ def build_dashboard(messages: dict) -> dict:
             "targets": [
                 {
                     "refId": "A",
-                    "expr": 'finops_gcp_service_is_new == 1',
+                    "expr": "finops_gcp_service_is_new == 1",
                     "format": "table",
                     "instant": True,
                 }
@@ -635,13 +889,40 @@ def build_dashboard(messages: dict) -> dict:
                 },
             ],
         },
-        # F
-        text_panel(104, "F · Waste & opportunities (demo heuristics)", f, 0, 31, 24, 2),
+        text_panel(110, "D · Concentration / Pareto", d, 0, 31, 24, 2),
+        {
+            "id": 20,
+            "type": "stat",
+            "title": "Top 5 share",
+            "gridPos": {"h": 4, "w": 12, "x": 0, "y": 33},
+            "datasource": ds,
+            "targets": [{"refId": "A", "expr": "finops_pareto_top5_share_ratio"}],
+            "fieldConfig": {"defaults": {"unit": "percentunit", "decimals": 0}},
+        },
+        {
+            "id": 21,
+            "type": "stat",
+            "title": "Services for 80% spend",
+            "gridPos": {"h": 4, "w": 12, "x": 12, "y": 33},
+            "datasource": ds,
+            "targets": [{"refId": "A", "expr": "finops_pareto_services_for_80"}],
+        },
+        text_panel(111, "E · Savings & discounts", e, 0, 37, 24, 2),
+        {
+            "id": 22,
+            "type": "stat",
+            "title": "Recorded savings (USD)",
+            "gridPos": {"h": 4, "w": 24, "x": 0, "y": 39},
+            "datasource": ds,
+            "targets": [{"refId": "A", "expr": "finops_savings_realized_usd"}],
+            "fieldConfig": {"defaults": {"unit": "currencyUSD", "decimals": 2}},
+        },
+        text_panel(104, "F · Waste & opportunities (demo heuristics)", f, 0, 43, 24, 2),
         {
             "id": 9,
             "type": "bargauge",
             "title": "Estimated savings by opportunity",
-            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 33},
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 45},
             "datasource": ds,
             "options": {"orientation": "horizontal", "displayMode": "gradient"},
             "targets": [
@@ -657,7 +938,7 @@ def build_dashboard(messages: dict) -> dict:
             "id": 10,
             "type": "piechart",
             "title": "Opportunity mix by type",
-            "gridPos": {"h": 8, "w": 12, "x": 12, "y": 33},
+            "gridPos": {"h": 8, "w": 12, "x": 12, "y": 45},
             "datasource": ds,
             "targets": [
                 {
@@ -667,13 +948,12 @@ def build_dashboard(messages: dict) -> dict:
                 }
             ],
         },
-        # G
-        text_panel(105, "G · Action queue", g, 0, 41, 24, 2),
+        text_panel(105, "G · Action queue", g, 0, 53, 24, 2),
         {
             "id": 11,
             "type": "table",
             "title": "Prioritized actions",
-            "gridPos": {"h": 9, "w": 24, "x": 0, "y": 43},
+            "gridPos": {"h": 9, "w": 24, "x": 0, "y": 55},
             "datasource": ds,
             "targets": [
                 {
@@ -691,10 +971,7 @@ def build_dashboard(messages: dict) -> dict:
             ],
             "transformations": [
                 {"id": "labelsToFields", "options": {}},
-                {
-                    "id": "merge",
-                    "options": {},
-                },
+                {"id": "merge", "options": {}},
                 {
                     "id": "organize",
                     "options": {
@@ -710,25 +987,48 @@ def build_dashboard(messages: dict) -> dict:
                 },
                 {
                     "id": "sortBy",
-                    "options": {
-                        "sort": [{"field": "Priority score", "desc": True}],
-                    },
+                    "options": {"sort": [{"field": "Priority score", "desc": True}]},
                 },
             ],
         },
-        # J
-        text_panel(106, "J · Alerts & messages", j, 0, 52, 24, 2),
+        text_panel(112, "H · Allocation hygiene", h, 0, 64, 24, 2),
+        {
+            "id": 23,
+            "type": "stat",
+            "title": "Tagged spend ratio",
+            "gridPos": {"h": 4, "w": 24, "x": 0, "y": 66},
+            "datasource": ds,
+            "targets": [{"refId": "A", "expr": "finops_allocation_compliance_ratio"}],
+            "fieldConfig": {"defaults": {"unit": "percentunit", "decimals": 0}},
+        },
+        text_panel(113, "I · Forecast & runway", i, 0, 70, 24, 2),
+        {
+            "id": 24,
+            "type": "stat",
+            "title": "Projected next invoice",
+            "gridPos": {"h": 4, "w": 24, "x": 0, "y": 72},
+            "datasource": ds,
+            "targets": [{"refId": "A", "expr": "finops_forecast_next_invoice_usd"}],
+            "fieldConfig": {"defaults": {"unit": "currencyUSD", "decimals": 0}},
+        },
+        text_panel(106, "J · Alerts & messages", j, 0, 76, 24, 2),
         {
             "id": 12,
             "type": "stat",
             "title": "Spend spike",
-            "gridPos": {"h": 4, "w": 6, "x": 0, "y": 54},
+            "gridPos": {"h": 4, "w": 6, "x": 0, "y": 78},
             "datasource": ds,
             "targets": [{"refId": "A", "expr": 'finops_gcp_alert_flag{alert="spend_spike"}'}],
             "fieldConfig": {
                 "defaults": {
                     "mappings": [
-                        {"type": "value", "options": {"0": {"text": "OK", "color": "green"}, "1": {"text": "ACTIVE", "color": "red"}}}
+                        {
+                            "type": "value",
+                            "options": {
+                                "0": {"text": "OK", "color": "green"},
+                                "1": {"text": "ACTIVE", "color": "red"},
+                            },
+                        }
                     ],
                     "thresholds": {
                         "mode": "absolute",
@@ -741,13 +1041,19 @@ def build_dashboard(messages: dict) -> dict:
             "id": 13,
             "type": "stat",
             "title": "Service growth",
-            "gridPos": {"h": 4, "w": 6, "x": 6, "y": 54},
+            "gridPos": {"h": 4, "w": 6, "x": 6, "y": 78},
             "datasource": ds,
             "targets": [{"refId": "A", "expr": 'finops_gcp_alert_flag{alert="service_growth"}'}],
             "fieldConfig": {
                 "defaults": {
                     "mappings": [
-                        {"type": "value", "options": {"0": {"text": "OK", "color": "green"}, "1": {"text": "ACTIVE", "color": "orange"}}}
+                        {
+                            "type": "value",
+                            "options": {
+                                "0": {"text": "OK", "color": "green"},
+                                "1": {"text": "ACTIVE", "color": "orange"},
+                            },
+                        }
                     ]
                 }
             },
@@ -756,13 +1062,19 @@ def build_dashboard(messages: dict) -> dict:
             "id": 14,
             "type": "stat",
             "title": "Open actions",
-            "gridPos": {"h": 4, "w": 6, "x": 12, "y": 54},
+            "gridPos": {"h": 4, "w": 6, "x": 12, "y": 78},
             "datasource": ds,
             "targets": [{"refId": "A", "expr": 'finops_gcp_alert_flag{alert="open_actions"}'}],
             "fieldConfig": {
                 "defaults": {
                     "mappings": [
-                        {"type": "value", "options": {"0": {"text": "Clear", "color": "green"}, "1": {"text": "Queue", "color": "blue"}}}
+                        {
+                            "type": "value",
+                            "options": {
+                                "0": {"text": "Clear", "color": "green"},
+                                "1": {"text": "Queue", "color": "blue"},
+                            },
+                        }
                     ]
                 }
             },
@@ -771,28 +1083,35 @@ def build_dashboard(messages: dict) -> dict:
             "id": 15,
             "type": "stat",
             "title": "Label compliance drift",
-            "gridPos": {"h": 4, "w": 6, "x": 18, "y": 54},
+            "gridPos": {"h": 4, "w": 6, "x": 18, "y": 78},
             "datasource": ds,
             "targets": [{"refId": "A", "expr": 'finops_gcp_alert_flag{alert="label_compliance_drift"}'}],
             "fieldConfig": {
                 "defaults": {
                     "mappings": [
-                        {"type": "value", "options": {"0": {"text": "OK", "color": "green"}, "1": {"text": "DRIFT", "color": "red"}}}
+                        {
+                            "type": "value",
+                            "options": {
+                                "0": {"text": "OK", "color": "green"},
+                                "1": {"text": "DRIFT", "color": "red"},
+                            },
+                        }
                     ]
                 }
             },
         },
+        text_panel(114, "K · Governance", k, 0, 82, 24, 3),
     ]
 
     return {
         "id": None,
         "uid": "finops-local",
-        "title": "FinOps v1 Slim (CSV demo)",
-        "description": "Evidence layer for v1 — sections A B C F G J. v1.1 adds D E H I K. Pages is the product front door.",
-        "tags": ["finops", "gcp", "v1-slim", "csv-demo"],
+        "title": "FinOps v1.1 (CSV demo)",
+        "description": "Evidence layer for v1.1 — sections A–K. Pages is the product front door.",
+        "tags": ["finops", "gcp", "v1.1", "csv-demo"],
         "timezone": "browser",
         "schemaVersion": 39,
-        "version": 3,
+        "version": 4,
         "refresh": "30s",
         "editable": True,
         "panels": panels,
@@ -838,9 +1157,35 @@ def main() -> None:
         raise SystemExit(f"ERROR: no service rows parsed from {args.csv}")
 
     opportunities = build_opportunities(services, invoice_total)
-    alerts = build_alerts(services, opportunities)
-    messages = build_messages(services, invoice_total, opportunities, alerts)
-    prom = render_prom(services, invoice_total, opportunities, alerts, messages)
+    pareto = build_pareto(services, invoice_total)
+    savings = build_savings(services)
+    allocation = build_allocation(services, invoice_total)
+    _, _, invoice_mom = _invoice_mom(services)
+    opportunity_total = round(sum(o["est_monthly_savings_usd"] for o in opportunities), 2)
+    forecast = build_forecast(invoice_total, invoice_mom, opportunity_total)
+    governance = build_governance()
+    alerts = build_alerts(services, opportunities, allocation)
+    messages = build_messages(
+        services,
+        invoice_total,
+        opportunities,
+        alerts,
+        pareto,
+        savings,
+        allocation,
+        forecast,
+    )
+    prom = render_prom(
+        services,
+        invoice_total,
+        opportunities,
+        alerts,
+        messages,
+        pareto,
+        savings,
+        allocation,
+        forecast,
+    )
 
     args.metrics_out.parent.mkdir(parents=True, exist_ok=True)
     args.metrics_out.write_text(prom, encoding="utf-8")
@@ -852,7 +1197,18 @@ def main() -> None:
         args.dashboard_out.write_text(json.dumps(dashboard, indent=2) + "\n", encoding="utf-8")
 
     if not args.skip_site_snapshot:
-        snapshot = build_site_snapshot(services, invoice_total, opportunities, alerts, messages)
+        snapshot = build_site_snapshot(
+            services,
+            invoice_total,
+            opportunities,
+            alerts,
+            messages,
+            pareto,
+            savings,
+            allocation,
+            forecast,
+            governance,
+        )
         args.site_snapshot_out.parent.mkdir(parents=True, exist_ok=True)
         args.site_snapshot_out.write_text(json.dumps(snapshot, indent=2) + "\n", encoding="utf-8")
 
